@@ -10,13 +10,19 @@
 
 class Vocabulary {
 private:
-    vector<Word*> vocabulary;
+    vector<VocabularyWord*> vocabulary;
     vector<int> table;
+    void constructHuffmanTree();
+    void createUniGramTable();
+    int MAX_CODE_LENGTH = 40;
 public:
+    Vocabulary();
     explicit Vocabulary(Corpus& corpus);
     int size();
-    int getPosition(Word* word);
+    int getPosition(VocabularyWord* word);
     VocabularyWord* getWord(int index);
+    int getTableValue(int index);
+    int getTableSize();
 };
 
 
