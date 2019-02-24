@@ -4,7 +4,7 @@
 
 #include "Iteration.h"
 
-Iteration::Iteration(Corpus& corpus, WordToVecParameter& parameter) {
+Iteration::Iteration(Corpus* corpus, WordToVecParameter& parameter) {
     this->parameter = parameter;
     this->corpus = corpus;
     startingAlpha = parameter.getAlpha();
@@ -15,7 +15,7 @@ void Iteration::alphaUpdate() {
     if (wordCount - lastWordCount > 10000) {
         wordCountActual += wordCount - lastWordCount;
         lastWordCount = wordCount;
-        alpha = startingAlpha * (1 - wordCountActual / (parameter.getNumberOfIterations() * corpus.numberOfWords() + 1.0));
+        alpha = startingAlpha * (1 - wordCountActual / (parameter.getNumberOfIterations() * corpus->numberOfWords() + 1.0));
         if (alpha < startingAlpha * 0.0001)
             alpha = startingAlpha * 0.0001;
     }
@@ -27,14 +27,14 @@ Sentence* Iteration::sentenceUpdate(Sentence* currentSentence) {
         wordCount += currentSentence->wordCount();
         sentenceIndex++;
         sentencePosition = 0;
-        if (sentenceIndex == corpus.sentenceCount()){
+        if (sentenceIndex == corpus->sentenceCount()){
             iterationCount++;
             wordCount = 0;
             lastWordCount = 0;
             sentenceIndex = 0;
-            corpus.shuffleSentences(1);
+            corpus->shuffleSentences(1);
         }
-        return corpus.getSentence(sentenceIndex);
+        return corpus->getSentence(sentenceIndex);
     }
     return currentSentence;
 }

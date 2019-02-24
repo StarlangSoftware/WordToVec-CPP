@@ -16,9 +16,9 @@ private:
     int sentencePosition = 0, sentenceIndex = 0;
     double startingAlpha, alpha;
     WordToVecParameter parameter;
-    Corpus corpus;
+    Corpus* corpus;
 public:
-    explicit Iteration(Corpus& corpus, WordToVecParameter& parameter);
+    explicit Iteration(Corpus* corpus, WordToVecParameter& parameter);
     void alphaUpdate();
     Sentence* sentenceUpdate(Sentence* currentSentence);
     double getAlpha();

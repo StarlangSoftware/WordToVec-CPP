@@ -4,7 +4,7 @@
 
 #include "VocabularyWord.h"
 
-VocabularyWord::VocabularyWord(string name, int count) : Word(name) {
+VocabularyWord::VocabularyWord(string name, int count) : Word(move(name)) {
     this->count = count;
     this->codeLength = 0;
 }
@@ -15,6 +15,8 @@ int VocabularyWord::getCount() {
 
 void VocabularyWord::setCodeLength(int codeLength) {
     this->codeLength = codeLength;
+    this->code.resize(codeLength);
+    this->point.resize(codeLength);
 }
 
 void VocabularyWord::setCode(int index, int value) {

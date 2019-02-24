@@ -16,7 +16,7 @@ private:
     Matrix wordVectors = Matrix(0), wordVectorUpdate = Matrix(0);
     Vocabulary vocabulary;
     WordToVecParameter parameter;
-    Corpus corpus;
+    Corpus* corpus;
     vector<double> expTable;
     int EXP_TABLE_SIZE = 1000;
     int MAX_EXP = 6;
