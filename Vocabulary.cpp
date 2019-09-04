@@ -16,6 +16,12 @@ struct VocabularyWordComparatorAccordingToName{
     }
 };
 
+/**
+ * Constructor for the {@link Vocabulary} class. For each distinct word in the corpus, a {@link VocabularyWord}
+ * instance is created. After that, words are sorted according to their occurences. Unigram table is constructed,
+ * whereafter Huffman tree is created based on the number of occurences of the words.
+ * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
+ */
 Vocabulary::Vocabulary(Corpus& corpus) {
     vector<Word> wordList;
     wordList = corpus.getWordList();
@@ -28,19 +34,36 @@ Vocabulary::Vocabulary(Corpus& corpus) {
     std::stable_sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToName());
 }
 
+/**
+ * Returns number of words in the vocabulary.
+ * @return Number of words in the vocabulary.
+ */
 int Vocabulary::size() {
     return vocabulary.size();
 }
 
+/**
+ * Searches a word and returns the position of that word in the vocabulary. Search is done using binary search.
+ * @param word Word to be searched.
+ * @return Position of the word searched.
+ */
 int Vocabulary::getPosition(VocabularyWord *word) {
     auto middle = lower_bound(vocabulary.begin(), vocabulary.end(), word, VocabularyWordComparatorAccordingToName());
     return middle - vocabulary.begin();
 }
 
+/**
+ * Returns the word at a given index.
+ * @param index Index of the word.
+ * @return The word at a given index.
+ */
 VocabularyWord *Vocabulary::getWord(int index) {
     return (VocabularyWord*) vocabulary[index];
 }
 
+/**
+ * Constructs Huffman Tree based on the number of occurences of the words.
+ */
 void Vocabulary::constructHuffmanTree() {
     int min1i, min2i, b, i;
     int* count = new int[vocabulary.size() * 2 + 1];
@@ -109,6 +132,9 @@ void Vocabulary::constructHuffmanTree() {
     delete[] parentNode;
 }
 
+/**
+ * Constructs the unigram table based on the number of occurences of the words.
+ */
 void Vocabulary::createUniGramTable() {
     int i;
     double total = 0;
@@ -130,10 +156,19 @@ void Vocabulary::createUniGramTable() {
     }
 }
 
+/**
+ * Accessor for the unigram table.
+ * @param index Index of the word.
+ * @return Unigram table value at a given index.
+ */
 int Vocabulary::getTableValue(int index) {
     return table[index];
 }
 
+/**
+ * Returns size of the unigram table.
+ * @return Size of the unigram table.
+ */
 int Vocabulary::getTableSize() {
     return table.size();
 }

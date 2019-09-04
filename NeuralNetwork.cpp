@@ -6,6 +6,13 @@
 #include "NeuralNetwork.h"
 #include "Iteration.h"
 
+/**
+ * Constructor for the {@link NeuralNetwork} class. Gets corpus and network parameters as input and sets the
+ * corresponding parameters first. After that, initializes the network with random weights between -0.5 and 0.5.
+ * Constructs vector update matrix and prepares the exp table.
+ * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
+ * @param parameter Parameters of the Word2Vec algorithm.
+ */
 NeuralNetwork::NeuralNetwork(Corpus& corpus, WordToVecParameter parameter) {
     this->vocabulary = Vocabulary(corpus);
     this->parameter = parameter;
@@ -15,6 +22,10 @@ NeuralNetwork::NeuralNetwork(Corpus& corpus, WordToVecParameter parameter) {
     prepareExpTable();
 }
 
+/**
+ * Constructs the fast exponentiation table. Instead of taking exponent at each time, the algorithm will lookup
+ * the table.
+ */
 void NeuralNetwork::prepareExpTable() {
     expTable.reserve(EXP_TABLE_SIZE + 1);
     for (int i = 0; i < EXP_TABLE_SIZE; i++) {
@@ -23,6 +34,13 @@ void NeuralNetwork::prepareExpTable() {
     }
 }
 
+/**
+ * Calculates G value in the Word2Vec algorithm.
+ * @param f F value.
+ * @param alpha Learning rate alpha.
+ * @param label Label of the instance.
+ * @return Calculated G value.
+ */
 double NeuralNetwork::calculateG(double f, double alpha, double label) {
     if (f > MAX_EXP){
         return (label - 1) * alpha;
@@ -35,6 +53,11 @@ double NeuralNetwork::calculateG(double f, double alpha, double label) {
     }
 }
 
+/**
+ * Main method for training the Word2Vec algorithm. Depending on the training parameter, CBox or SkipGram algorithm
+ * is applied.
+ * @return Dictionary of word vectors.
+ */
 VectorizedDictionary NeuralNetwork::train() {
     VectorizedDictionary result = VectorizedDictionary(Comparator::TURKISH);
     if (parameter.isCbow()){
@@ -48,6 +71,9 @@ VectorizedDictionary NeuralNetwork::train() {
     return result;
 }
 
+/**
+ * Main method for training the CBow version of Word2Vec algorithm.
+ */
 void NeuralNetwork::trainCbow() {
     int wordIndex, lastWordIndex;
     Iteration iteration = Iteration(corpus, parameter);
@@ -121,6 +147,9 @@ void NeuralNetwork::trainCbow() {
     }
 }
 
+/**
+ * Main method for training the SkipGram version of Word2Vec algorithm.
+ */
 void NeuralNetwork::trainSkipGram() {
     int wordIndex, lastWordIndex;
     Iteration iteration = Iteration(corpus, parameter);

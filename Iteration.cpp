@@ -4,6 +4,12 @@
 
 #include "Iteration.h"
 
+/**
+ * Constructor for the {@link Iteration} class. Get corpus and parameter as input, sets the corresponding
+ * parameters.
+ * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
+ * @param wordToVecParameter Parameters of the Word2Vec algorithm.
+ */
 Iteration::Iteration(Corpus* corpus, WordToVecParameter& parameter) {
     this->parameter = parameter;
     this->corpus = corpus;
@@ -11,6 +17,9 @@ Iteration::Iteration(Corpus* corpus, WordToVecParameter& parameter) {
     alpha = parameter.getAlpha();
 }
 
+/**
+ * Updates the alpha parameter after 10000 words has been processed.
+ */
 void Iteration::alphaUpdate() {
     if (wordCount - lastWordCount > 10000) {
         wordCountActual += wordCount - lastWordCount;
@@ -21,6 +30,14 @@ void Iteration::alphaUpdate() {
     }
 }
 
+/**
+ * Updates sentencePosition, sentenceIndex (if needed) and returns the current sentence processed. If one sentence
+ * is finished, the position shows the beginning of the next sentence and sentenceIndex is incremented. If the
+ * current sentence is the last sentence, the system shuffles the sentences and returns the first sentence.
+ * @param currentSentence Current sentence processed.
+ * @return If current sentence is not changed, currentSentence; if changed the next sentence; if next sentence is
+ * the last sentence; shuffles the corpus and returns the first sentence.
+ */
 Sentence* Iteration::sentenceUpdate(Sentence* currentSentence) {
     sentencePosition++;
     if (sentencePosition >= currentSentence->wordCount()) {
@@ -39,18 +56,34 @@ Sentence* Iteration::sentenceUpdate(Sentence* currentSentence) {
     return currentSentence;
 }
 
+/**
+ * Accessor for the alpha attribute.
+ * @return Alpha attribute.
+ */
 double Iteration::getAlpha() {
     return alpha;
 }
 
+/**
+ * Accessor for the iterationCount attribute.
+ * @return IterationCount attribute.
+ */
 int Iteration::getIterationCount() {
     return iterationCount;
 }
 
+/**
+ * Accessor for the sentenceIndex attribute.
+ * @return SentenceIndex attribute
+ */
 int Iteration::getSentenceIndex() {
     return sentenceIndex;
 }
 
+/**
+ * Accessor for the sentencePosition attribute.
+ * @return SentencePosition attribute
+ */
 int Iteration::getSentencePosition() {
     return sentencePosition;
 }
