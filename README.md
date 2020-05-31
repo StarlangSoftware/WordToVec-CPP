@@ -1,5 +1,3 @@
-# WordToVec
-
 For Developers
 ============
 You can also see [Java](https://github.com/starlangsoftware/WordToVec), [Python](https://github.com/starlangsoftware/WordToVec-Py),
