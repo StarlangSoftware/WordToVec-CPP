@@ -46,3 +46,14 @@ Result: The imported project is listed in the Project Explorer view and files ar
 **From IDE**
 
 After being done with the downloading and opening project, select **Build Project** option from **Build** menu. After compilation process, user can run TestWordToVec.cpp .
+
+Detailed Description
+============
+
+To initialize artificial neural network:
+
+	NeuralNetwork(Corpus corpus, WordToVecParameter parameter)
+
+To train neural network:
+
+	VectorizedDictionary train()
