@@ -17,7 +17,7 @@ NeuralNetwork::NeuralNetwork(Corpus& corpus, WordToVecParameter parameter) {
     this->vocabulary = Vocabulary(corpus);
     this->parameter = parameter;
     this->corpus = &corpus;
-    wordVectors = Matrix(vocabulary.size(), parameter.getLayerSize(), -0.5, 0.5);
+    wordVectors = Matrix(vocabulary.size(), parameter.getLayerSize(), -0.5, 0.5, default_random_engine(parameter.getSeed()));
     wordVectorUpdate = Matrix(vocabulary.size(), parameter.getLayerSize());
     prepareExpTable();
 }
@@ -83,7 +83,7 @@ void NeuralNetwork::trainCbow() {
     VocabularyWord* currentWord;
     Vector outputs = Vector(parameter.getLayerSize(), 0);
     Vector outputUpdate = Vector(parameter.getLayerSize(), 0);
-    corpus->shuffleSentences(1);
+    corpus->shuffleSentences(parameter.getSeed());
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate();
         wordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition()));
@@ -159,7 +159,7 @@ void NeuralNetwork::trainSkipGram() {
     VocabularyWord* currentWord;
     Vector outputs = Vector(parameter.getLayerSize(), 0);
     Vector outputUpdate = Vector(parameter.getLayerSize(), 0);
-    corpus->shuffleSentences(1);
+    corpus->shuffleSentences(parameter.getSeed());
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate();
         wordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition()));

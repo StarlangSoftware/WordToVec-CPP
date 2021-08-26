@@ -66,6 +66,14 @@ int WordToVecParameter::getNumberOfIterations() {
 }
 
 /**
+ * Accessor for the seed attribute.
+ * @return Seed to train the network.
+ */
+int WordToVecParameter::getSeed() {
+    return seed;
+}
+
+/**
  * Mutator for the layerSize attribute.
  * @param layerSize New size of the word vectors.
  */
@@ -115,4 +123,8 @@ void WordToVecParameter::setNegativeSamplingSize(int negativeSamplingSize) {
 
 void WordToVecParameter::setNumberOfIterations(int numberOfIterations) {
     this->numberOfIterations = numberOfIterations;
+}
+
+void WordToVecParameter::setSeed(int seed) {
+    this->seed = seed;
 }

@@ -15,6 +15,7 @@ private:
     bool hierarchicalSoftMax = false;
     int negativeSamplingSize = 5;
     int numberOfIterations = 3;
+    int seed = 1;
 public:
     WordToVecParameter();
     int getLayerSize();
@@ -24,6 +25,7 @@ public:
     bool isHierarchicalSoftMax();
     int getNegativeSamplingSize();
     int getNumberOfIterations();
+    int getSeed();
     void setLayerSize(int layerSize);
     void setCbow(bool cbow);
     void setAlpha(double alpha);
@@ -31,6 +33,7 @@ public:
     void setHierarchicalSoftMax(bool hierarchicalSoftMax);
     void setNegativeSamplingSize(int negativeSamplingSize);
     void setNumberOfIterations(int numberOfIterations);
+    void setSeed(int seed);
 };
 
 
