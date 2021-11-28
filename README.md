@@ -11,7 +11,8 @@ SkipGram is a prediction based distributional semantic model (DSM) consisting of
 
 For Developers
 ============
-You can also see [Java](https://github.com/starlangsoftware/WordToVec), [Python](https://github.com/starlangsoftware/WordToVec-Py), [Cython](https://github.com/starlangsoftware/WordToVec-Cy), [Swift](https://github.com/starlangsoftware/WordToVec-Swift), or [C#](https://github.com/starlangsoftware/WordToVec-CS) repository.
+You can also see [Java](https://github.com/starlangsoftware/WordToVec), [Python](https://github.com/starlangsoftware/WordToVec-Py), [Cython](https://github.com/starlangsoftware/WordToVec-Cy), [Swift](https://github.com/starlangsoftware/WordToVec-Swift), 
+[Js](https://github.com/starlangsoftware/WordToVec-Js) or [C#](https://github.com/starlangsoftware/WordToVec-CS) repository.
 
 ## Requirements
 
