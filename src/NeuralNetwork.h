@@ -8,7 +8,7 @@
 
 #include "Matrix.h"
 #include "Vocabulary.h"
-#include "VectorizedDictionary.h"
+#include "Dictionary/VectorizedDictionary.h"
 #include "WordToVecParameter.h"
 
 class NeuralNetwork {

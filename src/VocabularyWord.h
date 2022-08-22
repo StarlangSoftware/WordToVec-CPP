@@ -4,7 +4,7 @@
 
 #ifndef WORDTOVEC_VOCABULARYWORD_H
 #define WORDTOVEC_VOCABULARYWORD_H
-#include "Word.h"
+#include "Dictionary/Word.h"
 #include <vector>
 
 class VocabularyWord : public Word{

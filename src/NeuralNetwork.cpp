@@ -2,7 +2,7 @@
 // Created by olcay on 20.02.2019.
 //
 
-#include "Dictionary.h"
+#include "Dictionary/Dictionary.h"
 #include "NeuralNetwork.h"
 #include "Iteration.h"
 
