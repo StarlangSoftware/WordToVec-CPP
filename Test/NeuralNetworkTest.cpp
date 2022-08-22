@@ -7,8 +7,8 @@
 #include <Corpus.h>
 #include <VectorizedDictionary.h>
 #include "catch.hpp"
-#include "../WordToVecParameter.h"
-#include "../NeuralNetwork.h"
+#include "../src/WordToVecParameter.h"
+#include "../src/NeuralNetwork.h"
 
 VectorizedDictionary train(Corpus& corpus, bool cBow){
     WordToVecParameter parameter = WordToVecParameter();
