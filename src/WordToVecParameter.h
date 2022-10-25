@@ -18,14 +18,14 @@ private:
     int seed = 1;
 public:
     WordToVecParameter();
-    int getLayerSize();
-    bool isCbow();
-    double getAlpha();
-    int getWindow();
-    bool isHierarchicalSoftMax();
-    int getNegativeSamplingSize();
-    int getNumberOfIterations();
-    int getSeed();
+    int getLayerSize() const;
+    bool isCbow() const;
+    double getAlpha() const;
+    int getWindow() const;
+    bool isHierarchicalSoftMax() const;
+    int getNegativeSamplingSize() const;
+    int getNumberOfIterations() const;
+    int getSeed() const;
     void setLayerSize(int layerSize);
     void setCbow(bool cbow);
     void setAlpha(double alpha);

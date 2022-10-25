@@ -14,14 +14,14 @@ private:
     vector<int> point;
     int codeLength;
 public:
-    VocabularyWord(string name, int count);
-    int getCount();
-    void setCodeLength(int codeLength);
+    VocabularyWord(const string& name, int count);
+    int getCount() const;
+    void setCodeLength(int _codeLength);
     void setCode(int index, int value);
     void setPoint(int index, int value);
-    int getCodeLength();
-    int getPoint(int index);
-    int getCode(int index);
+    int getCodeLength() const;
+    int getPoint(int index) const;
+    int getCode(int index) const;
 };
 
 

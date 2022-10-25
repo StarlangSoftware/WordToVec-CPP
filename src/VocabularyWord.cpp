@@ -10,7 +10,7 @@
  * @param name Lemma of the word
  * @param count Number of occurences of this word in the corpus
  */
-VocabularyWord::VocabularyWord(string name, int count) : Word(move(name)) {
+VocabularyWord::VocabularyWord(const string& name, int count) : Word(name) {
     this->count = count;
     this->codeLength = 0;
 }
@@ -19,18 +19,18 @@ VocabularyWord::VocabularyWord(string name, int count) : Word(move(name)) {
  * Accessor for the count attribute.
  * @return Number of occurences of this word.
  */
-int VocabularyWord::getCount() {
+int VocabularyWord::getCount() const{
     return count;
 }
 
 /**
- * Mutator for codeLength attribute.
- * @param codeLength New value for the codeLength.
+ * Mutator for _codeLength attribute.
+ * @param _codeLength New value for the _codeLength.
  */
-void VocabularyWord::setCodeLength(int codeLength) {
-    this->codeLength = codeLength;
-    this->code.resize(codeLength);
-    this->point.resize(codeLength);
+void VocabularyWord::setCodeLength(int _codeLength) {
+    this->codeLength = _codeLength;
+    this->code.resize(_codeLength);
+    this->point.resize(_codeLength);
 }
 
 /**
@@ -55,7 +55,7 @@ void VocabularyWord::setPoint(int index, int value) {
  * Accessor for the codeLength attribute.
  * @return Length of the Huffman code for this word.
  */
-int VocabularyWord::getCodeLength() {
+int VocabularyWord::getCodeLength() const{
     return codeLength;
 }
 
@@ -64,7 +64,7 @@ int VocabularyWord::getCodeLength() {
  * @param index Index of the point.
  * @return Value for that indexed element of point.
  */
-int VocabularyWord::getPoint(int index) {
+int VocabularyWord::getPoint(int index) const{
     return point[index];
 }
 
@@ -73,6 +73,6 @@ int VocabularyWord::getPoint(int index) {
  * @param index Index of the code.
  * @return Value for that indexed element of code.
  */
-int VocabularyWord::getCode(int index) {
+int VocabularyWord::getCode(int index) const{
     return code[index];
 }

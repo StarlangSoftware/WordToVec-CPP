@@ -10,7 +10,7 @@
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
  * @param wordToVecParameter Parameters of the Word2Vec algorithm.
  */
-Iteration::Iteration(Corpus* corpus, WordToVecParameter& parameter) {
+Iteration::Iteration(const Corpus& corpus, const WordToVecParameter& parameter) {
     this->parameter = parameter;
     this->corpus = corpus;
     startingAlpha = parameter.getAlpha();
@@ -24,7 +24,7 @@ void Iteration::alphaUpdate() {
     if (wordCount - lastWordCount > 10000) {
         wordCountActual += wordCount - lastWordCount;
         lastWordCount = wordCount;
-        alpha = startingAlpha * (1 - wordCountActual / (parameter.getNumberOfIterations() * corpus->numberOfWords() + 1.0));
+        alpha = startingAlpha * (1 - wordCountActual / (parameter.getNumberOfIterations() * corpus.numberOfWords() + 1.0));
         if (alpha < startingAlpha * 0.0001)
             alpha = startingAlpha * 0.0001;
     }
@@ -44,14 +44,14 @@ Sentence* Iteration::sentenceUpdate(Sentence* currentSentence) {
         wordCount += currentSentence->wordCount();
         sentenceIndex++;
         sentencePosition = 0;
-        if (sentenceIndex == corpus->sentenceCount()){
+        if (sentenceIndex == corpus.sentenceCount()){
             iterationCount++;
             wordCount = 0;
             lastWordCount = 0;
             sentenceIndex = 0;
-            corpus->shuffleSentences(1);
+            corpus.shuffleSentences(1);
         }
-        return corpus->getSentence(sentenceIndex);
+        return corpus.getSentence(sentenceIndex);
     }
     return currentSentence;
 }
@@ -60,7 +60,7 @@ Sentence* Iteration::sentenceUpdate(Sentence* currentSentence) {
  * Accessor for the alpha attribute.
  * @return Alpha attribute.
  */
-double Iteration::getAlpha() {
+double Iteration::getAlpha() const{
     return alpha;
 }
 
@@ -68,7 +68,7 @@ double Iteration::getAlpha() {
  * Accessor for the iterationCount attribute.
  * @return IterationCount attribute.
  */
-int Iteration::getIterationCount() {
+int Iteration::getIterationCount() const{
     return iterationCount;
 }
 
@@ -76,7 +76,7 @@ int Iteration::getIterationCount() {
  * Accessor for the sentenceIndex attribute.
  * @return SentenceIndex attribute
  */
-int Iteration::getSentenceIndex() {
+int Iteration::getSentenceIndex() const{
     return sentenceIndex;
 }
 
@@ -84,6 +84,6 @@ int Iteration::getSentenceIndex() {
  * Accessor for the sentencePosition attribute.
  * @return SentencePosition attribute
  */
-int Iteration::getSentencePosition() {
+int Iteration::getSentencePosition() const{
     return sentencePosition;
 }

@@ -13,7 +13,7 @@ WordToVecParameter::WordToVecParameter() = default;
  * Accessor for layerSize attribute.
  * @return Size of the word vectors.
  */
-int WordToVecParameter::getLayerSize() {
+int WordToVecParameter::getLayerSize() const{
     return layerSize;
 }
 
@@ -21,7 +21,7 @@ int WordToVecParameter::getLayerSize() {
  * Accessor for CBow attribute.
  * @return True is CBow will be applied, false otherwise.
  */
-bool WordToVecParameter::isCbow() {
+bool WordToVecParameter::isCbow() const{
     return cbow;
 }
 
@@ -29,7 +29,7 @@ bool WordToVecParameter::isCbow() {
  * Accessor for the alpha attribute.
  * @return Current learning rate alpha.
  */
-double WordToVecParameter::getAlpha() {
+double WordToVecParameter::getAlpha() const{
     return alpha;
 }
 
@@ -37,7 +37,7 @@ double WordToVecParameter::getAlpha() {
  * Accessor for the window size attribute.
  * @return Current window size.
  */
-int WordToVecParameter::getWindow() {
+int WordToVecParameter::getWindow() const{
     return window;
 }
 
@@ -45,7 +45,7 @@ int WordToVecParameter::getWindow() {
  * Accessor for the hierarchicalSoftMax attribute.
  * @return If hierarchical softmax will be applied, returns true; false otherwise.
  */
-bool WordToVecParameter::isHierarchicalSoftMax() {
+bool WordToVecParameter::isHierarchicalSoftMax() const{
     return hierarchicalSoftMax;
 }
 
@@ -53,7 +53,7 @@ bool WordToVecParameter::isHierarchicalSoftMax() {
  * Accessor for the negativeSamplingSize attribute.
  * @return Number of negative samples that will be withdrawn.
  */
-int WordToVecParameter::getNegativeSamplingSize() {
+int WordToVecParameter::getNegativeSamplingSize() const{
     return negativeSamplingSize;
 }
 
@@ -61,7 +61,7 @@ int WordToVecParameter::getNegativeSamplingSize() {
  * Accessor for the numberOfIterations attribute.
  * @return Number of epochs to train the network.
  */
-int WordToVecParameter::getNumberOfIterations() {
+int WordToVecParameter::getNumberOfIterations() const{
     return numberOfIterations;
 }
 
@@ -69,7 +69,7 @@ int WordToVecParameter::getNumberOfIterations() {
  * Accessor for the seed attribute.
  * @return Seed to train the network.
  */
-int WordToVecParameter::getSeed() {
+int WordToVecParameter::getSeed() const{
     return seed;
 }
 

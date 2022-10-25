@@ -10,29 +10,34 @@
 #include "../src/WordToVecParameter.h"
 #include "../src/NeuralNetwork.h"
 
-VectorizedDictionary train(Corpus& corpus, bool cBow){
-    WordToVecParameter parameter = WordToVecParameter();
-    parameter.setCbow(cBow);
-    NeuralNetwork neuralNetwork = NeuralNetwork(corpus, parameter);
-    return neuralNetwork.train();
-}
 
 TEST_CASE("NeuralNetworkTest-testTrainEnglishCBow") {
     Corpus english = Corpus("english-similarity-dataset.txt");
-    VectorizedDictionary dictionary = train(english, true);
+    WordToVecParameter parameter = WordToVecParameter();
+    parameter.setCbow(true);
+    NeuralNetwork neuralNetwork = NeuralNetwork(english, parameter);
+    VectorizedDictionary dictionary = neuralNetwork.train();
 }
 
 TEST_CASE("NeuralNetworkTest-testTrainEnglishSkipGram") {
     Corpus english = Corpus("english-similarity-dataset.txt");
-    VectorizedDictionary dictionary = train(english, false);
+    WordToVecParameter parameter = WordToVecParameter();
+    parameter.setCbow(false);
+    NeuralNetwork neuralNetwork = NeuralNetwork(english, parameter);
+    VectorizedDictionary dictionary = neuralNetwork.train();
 }
 
 TEST_CASE("NeuralNetworkTest-testTrainTurkishCBow") {
     Corpus turkish = Corpus("turkish-similarity-dataset.txt");
-    VectorizedDictionary dictionary = train(turkish, true);
+    WordToVecParameter parameter = WordToVecParameter();
+    parameter.setCbow(true);
+    NeuralNetwork neuralNetwork = NeuralNetwork(turkish, parameter);
+    VectorizedDictionary dictionary = neuralNetwork.train();
 }
 
 TEST_CASE("NeuralNetworkTest-testTrainTurkishSkipGram") {
     Corpus turkish = Corpus("turkish-similarity-dataset.txt");
-    VectorizedDictionary dictionary = train(turkish, false);
+    WordToVecParameter parameter = WordToVecParameter();
+    parameter.setCbow(false);
+    NeuralNetwork neuralNetwork = NeuralNetwork(turkish, parameter);
 }

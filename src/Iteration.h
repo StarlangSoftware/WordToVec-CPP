@@ -16,15 +16,15 @@ private:
     int sentencePosition = 0, sentenceIndex = 0;
     double startingAlpha, alpha;
     WordToVecParameter parameter;
-    Corpus* corpus;
+    Corpus corpus;
 public:
-    explicit Iteration(Corpus* corpus, WordToVecParameter& parameter);
+    explicit Iteration(const Corpus& corpus, const WordToVecParameter& parameter);
     void alphaUpdate();
     Sentence* sentenceUpdate(Sentence* currentSentence);
-    double getAlpha();
-    int getIterationCount();
-    int getSentenceIndex();
-    int getSentencePosition();
+    double getAlpha() const;
+    int getIterationCount() const;
+    int getSentenceIndex() const;
+    int getSentencePosition() const;
 };
 
 

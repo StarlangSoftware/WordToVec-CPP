@@ -17,12 +17,12 @@ private:
     int MAX_CODE_LENGTH = 40;
 public:
     Vocabulary();
-    explicit Vocabulary(Corpus& corpus);
-    int size();
-    int getPosition(VocabularyWord* word);
-    VocabularyWord* getWord(int index);
-    int getTableValue(int index);
-    int getTableSize();
+    explicit Vocabulary(const Corpus& corpus);
+    int size() const;
+    int getPosition(VocabularyWord* word) const;
+    VocabularyWord* getWord(int index) const;
+    int getTableValue(int index) const;
+    int getTableSize() const;
 };
 
 

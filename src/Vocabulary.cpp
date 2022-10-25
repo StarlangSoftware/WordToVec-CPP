@@ -22,10 +22,10 @@ struct VocabularyWordComparatorAccordingToName{
  * whereafter Huffman tree is created based on the number of occurences of the words.
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
  */
-Vocabulary::Vocabulary(Corpus& corpus) {
+Vocabulary::Vocabulary(const Corpus& corpus) {
     vector<Word> wordList;
     wordList = corpus.getWordList();
-    for (Word word: wordList){
+    for (const Word& word: wordList){
         vocabulary.push_back(new VocabularyWord(word.getName(), corpus.getCount(word)));
     }
     std::stable_sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToCount());
@@ -38,7 +38,7 @@ Vocabulary::Vocabulary(Corpus& corpus) {
  * Returns number of words in the vocabulary.
  * @return Number of words in the vocabulary.
  */
-int Vocabulary::size() {
+int Vocabulary::size() const{
     return vocabulary.size();
 }
 
@@ -47,7 +47,7 @@ int Vocabulary::size() {
  * @param word Word to be searched.
  * @return Position of the word searched.
  */
-int Vocabulary::getPosition(VocabularyWord *word) {
+int Vocabulary::getPosition(VocabularyWord *word) const{
     auto middle = lower_bound(vocabulary.begin(), vocabulary.end(), word, VocabularyWordComparatorAccordingToName());
     return middle - vocabulary.begin();
 }
@@ -57,7 +57,7 @@ int Vocabulary::getPosition(VocabularyWord *word) {
  * @param index Index of the word.
  * @return The word at a given index.
  */
-VocabularyWord *Vocabulary::getWord(int index) {
+VocabularyWord *Vocabulary::getWord(int index) const{
     return (VocabularyWord*) vocabulary[index];
 }
 
@@ -161,7 +161,7 @@ void Vocabulary::createUniGramTable() {
  * @param index Index of the word.
  * @return Unigram table value at a given index.
  */
-int Vocabulary::getTableValue(int index) {
+int Vocabulary::getTableValue(int index) const{
     return table[index];
 }
 
@@ -169,10 +169,8 @@ int Vocabulary::getTableValue(int index) {
  * Returns size of the unigram table.
  * @return Size of the unigram table.
  */
-int Vocabulary::getTableSize() {
+int Vocabulary::getTableSize() const{
     return table.size();
 }
 
-Vocabulary::Vocabulary() {
-
-}
+Vocabulary::Vocabulary() = default;
