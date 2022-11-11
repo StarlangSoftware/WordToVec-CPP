@@ -6,24 +6,23 @@
 #define WORDTOVEC_ITERATION_H
 
 
-#include "Corpus.h"
+#include "CorpusStream.h"
 #include "WordToVecParameter.h"
 
 class Iteration {
 private:
     int wordCount = 0, lastWordCount = 0, wordCountActual = 0;
     int iterationCount = 0;
-    int sentencePosition = 0, sentenceIndex = 0;
+    int sentencePosition = 0;
     double startingAlpha, alpha;
     WordToVecParameter parameter;
-    Corpus corpus;
+    CorpusStream* corpus;
 public:
-    explicit Iteration(const Corpus& corpus, const WordToVecParameter& parameter);
-    void alphaUpdate();
+    explicit Iteration(CorpusStream* corpus, const WordToVecParameter& parameter);
+    void alphaUpdate(int totalNumberOfWords);
     Sentence* sentenceUpdate(Sentence* currentSentence);
     double getAlpha() const;
     int getIterationCount() const;
-    int getSentenceIndex() const;
     int getSentencePosition() const;
 };
 

@@ -16,7 +16,7 @@ private:
     Matrix wordVectors = Matrix(0), wordVectorUpdate = Matrix(0);
     Vocabulary vocabulary;
     WordToVecParameter parameter;
-    Corpus corpus;
+    CorpusStream* corpus;
     vector<double> expTable;
     int EXP_TABLE_SIZE = 1000;
     int MAX_EXP = 6;
@@ -25,7 +25,7 @@ private:
     void trainCbow();
     void trainSkipGram();
 public:
-    NeuralNetwork(const Corpus& corpus, const WordToVecParameter& parameter);
+    NeuralNetwork(CorpusStream* corpus, const WordToVecParameter& parameter);
     ~NeuralNetwork();
     VectorizedDictionary train();
 };

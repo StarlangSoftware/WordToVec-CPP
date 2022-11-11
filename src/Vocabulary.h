@@ -5,7 +5,7 @@
 #ifndef WORDTOVEC_VOCABULARY_H
 #define WORDTOVEC_VOCABULARY_H
 #include <vector>
-#include "Corpus.h"
+#include "CorpusStream.h"
 #include "VocabularyWord.h"
 
 class Vocabulary {
@@ -15,10 +15,12 @@ private:
     void constructHuffmanTree();
     void createUniGramTable();
     int MAX_CODE_LENGTH = 40;
+    int totalNumberOfWords;
 public:
     Vocabulary();
-    explicit Vocabulary(const Corpus& corpus);
+    explicit Vocabulary(CorpusStream* corpus);
     int size() const;
+    int getTotalNumberOfWords() const;
     int getPosition(VocabularyWord* word) const;
     VocabularyWord* getWord(int index) const;
     int getTableValue(int index) const;

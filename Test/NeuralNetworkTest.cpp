@@ -12,7 +12,7 @@
 
 
 TEST_CASE("NeuralNetworkTest-testTrainEnglishCBow") {
-    Corpus english = Corpus("english-similarity-dataset.txt");
+    auto* english = new CorpusStream("english-similarity-dataset.txt");
     WordToVecParameter parameter = WordToVecParameter();
     parameter.setCbow(true);
     NeuralNetwork neuralNetwork = NeuralNetwork(english, parameter);
@@ -20,7 +20,7 @@ TEST_CASE("NeuralNetworkTest-testTrainEnglishCBow") {
 }
 
 TEST_CASE("NeuralNetworkTest-testTrainEnglishSkipGram") {
-    Corpus english = Corpus("english-similarity-dataset.txt");
+    auto* english = new CorpusStream("english-similarity-dataset.txt");
     WordToVecParameter parameter = WordToVecParameter();
     parameter.setCbow(false);
     NeuralNetwork neuralNetwork = NeuralNetwork(english, parameter);
@@ -28,7 +28,7 @@ TEST_CASE("NeuralNetworkTest-testTrainEnglishSkipGram") {
 }
 
 TEST_CASE("NeuralNetworkTest-testTrainTurkishCBow") {
-    Corpus turkish = Corpus("turkish-similarity-dataset.txt");
+    auto* turkish = new CorpusStream("turkish-similarity-dataset.txt");
     WordToVecParameter parameter = WordToVecParameter();
     parameter.setCbow(true);
     NeuralNetwork neuralNetwork = NeuralNetwork(turkish, parameter);
@@ -36,8 +36,9 @@ TEST_CASE("NeuralNetworkTest-testTrainTurkishCBow") {
 }
 
 TEST_CASE("NeuralNetworkTest-testTrainTurkishSkipGram") {
-    Corpus turkish = Corpus("turkish-similarity-dataset.txt");
+    auto* turkish = new CorpusStream("turkish-similarity-dataset.txt");
     WordToVecParameter parameter = WordToVecParameter();
     parameter.setCbow(false);
     NeuralNetwork neuralNetwork = NeuralNetwork(turkish, parameter);
+    VectorizedDictionary dictionary = neuralNetwork.train();
 }

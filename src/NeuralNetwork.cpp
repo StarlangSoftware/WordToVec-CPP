@@ -13,7 +13,7 @@
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
  * @param parameter Parameters of the Word2Vec algorithm.
  */
-NeuralNetwork::NeuralNetwork(const Corpus& corpus, const WordToVecParameter& parameter) {
+NeuralNetwork::NeuralNetwork(CorpusStream* corpus, const WordToVecParameter& parameter) {
     this->vocabulary = Vocabulary(corpus);
     this->parameter = parameter;
     this->corpus = corpus;
@@ -79,13 +79,13 @@ void NeuralNetwork::trainCbow() {
     Iteration iteration = Iteration(corpus, parameter);
     int target, label, l2, b, cw;
     double f, g;
-    Sentence* currentSentence = corpus.getSentence(iteration.getSentenceIndex());
+    corpus->open();
+    Sentence* currentSentence = corpus->getSentence();
     VocabularyWord* currentWord;
     Vector outputs = Vector(parameter.getLayerSize(), 0);
     Vector outputUpdate = Vector(parameter.getLayerSize(), 0);
-    corpus.shuffleSentences(parameter.getSeed());
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
-        iteration.alphaUpdate();
+        iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
         wordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition()));
         currentWord = vocabulary.getWord(wordIndex);
         outputs.clear();
@@ -145,6 +145,7 @@ void NeuralNetwork::trainCbow() {
         }
         currentSentence = iteration.sentenceUpdate(currentSentence);
     }
+    corpus->close();
 }
 
 /**
@@ -155,13 +156,13 @@ void NeuralNetwork::trainSkipGram() {
     Iteration iteration = Iteration(corpus, parameter);
     int target, label, l1, l2, b;
     double f, g;
-    Sentence* currentSentence = corpus.getSentence(iteration.getSentenceIndex());
+    corpus->open();
+    Sentence* currentSentence = corpus->getSentence();
     VocabularyWord* currentWord;
     Vector outputs = Vector(parameter.getLayerSize(), 0);
     Vector outputUpdate = Vector(parameter.getLayerSize(), 0);
-    corpus.shuffleSentences(parameter.getSeed());
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
-        iteration.alphaUpdate();
+        iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
         wordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition()));
         currentWord = vocabulary.getWord(wordIndex);
         outputs.clear();
@@ -211,6 +212,7 @@ void NeuralNetwork::trainSkipGram() {
         }
         currentSentence = iteration.sentenceUpdate(currentSentence);
     }
+    corpus->close();
 }
 
 NeuralNetwork::~NeuralNetwork() {

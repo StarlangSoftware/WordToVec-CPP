@@ -3,6 +3,8 @@
 //
 
 #include "Vocabulary.h"
+#include "CounterHashMap.h"
+#include <math.h>
 
 struct VocabularyWordComparatorAccordingToCount{
     bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2){
@@ -22,11 +24,20 @@ struct VocabularyWordComparatorAccordingToName{
  * whereafter Huffman tree is created based on the number of occurences of the words.
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
  */
-Vocabulary::Vocabulary(const Corpus& corpus) {
-    vector<Word> wordList;
-    wordList = corpus.getWordList();
-    for (const Word& word: wordList){
-        vocabulary.push_back(new VocabularyWord(word.getName(), corpus.getCount(word)));
+Vocabulary::Vocabulary(CorpusStream* corpus) {
+    CounterHashMap<string> counts = CounterHashMap<string>();
+    corpus->open();
+    Sentence* sentence = corpus->getSentence();
+    while (sentence != nullptr){
+        for (int i = 0; i < sentence->wordCount(); i++){
+            counts.put(sentence->getWord(i)->getName());
+        }
+        totalNumberOfWords += sentence->wordCount();
+        sentence = corpus->getSentence();
+    }
+    corpus->close();
+    for (auto & count : counts){
+        vocabulary.push_back(new VocabularyWord(count.first, count.second));
     }
     std::stable_sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToCount());
     createUniGramTable();
@@ -171,6 +182,10 @@ int Vocabulary::getTableValue(int index) const{
  */
 int Vocabulary::getTableSize() const{
     return table.size();
+}
+
+int Vocabulary::getTotalNumberOfWords() const {
+    return totalNumberOfWords;
 }
 
 Vocabulary::Vocabulary() = default;

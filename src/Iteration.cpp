@@ -10,7 +10,7 @@
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
  * @param wordToVecParameter Parameters of the Word2Vec algorithm.
  */
-Iteration::Iteration(const Corpus& corpus, const WordToVecParameter& parameter) {
+Iteration::Iteration(CorpusStream* corpus, const WordToVecParameter& parameter) {
     this->parameter = parameter;
     this->corpus = corpus;
     startingAlpha = parameter.getAlpha();
@@ -20,11 +20,11 @@ Iteration::Iteration(const Corpus& corpus, const WordToVecParameter& parameter) 
 /**
  * Updates the alpha parameter after 10000 words has been processed.
  */
-void Iteration::alphaUpdate() {
+void Iteration::alphaUpdate(int totalNumberOfWords) {
     if (wordCount - lastWordCount > 10000) {
         wordCountActual += wordCount - lastWordCount;
         lastWordCount = wordCount;
-        alpha = startingAlpha * (1 - wordCountActual / (parameter.getNumberOfIterations() * corpus.numberOfWords() + 1.0));
+        alpha = startingAlpha * (1 - wordCountActual / (parameter.getNumberOfIterations() * totalNumberOfWords + 1.0));
         if (alpha < startingAlpha * 0.0001)
             alpha = startingAlpha * 0.0001;
     }
@@ -42,16 +42,17 @@ Sentence* Iteration::sentenceUpdate(Sentence* currentSentence) {
     sentencePosition++;
     if (sentencePosition >= currentSentence->wordCount()) {
         wordCount += currentSentence->wordCount();
-        sentenceIndex++;
         sentencePosition = 0;
-        if (sentenceIndex == corpus.sentenceCount()){
+        Sentence* sentence = corpus->getSentence();
+        if (sentence == nullptr){
             iterationCount++;
             wordCount = 0;
             lastWordCount = 0;
-            sentenceIndex = 0;
-            corpus.shuffleSentences(1);
+            corpus->close();
+            corpus->open();
+            sentence = corpus->getSentence();
         }
-        return corpus.getSentence(sentenceIndex);
+        return sentence;
     }
     return currentSentence;
 }
@@ -70,14 +71,6 @@ double Iteration::getAlpha() const{
  */
 int Iteration::getIterationCount() const{
     return iterationCount;
-}
-
-/**
- * Accessor for the sentenceIndex attribute.
- * @return SentenceIndex attribute
- */
-int Iteration::getSentenceIndex() const{
-    return sentenceIndex;
 }
 
 /**
