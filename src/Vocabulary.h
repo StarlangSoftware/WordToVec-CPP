@@ -5,6 +5,7 @@
 #ifndef WORDTOVEC_VOCABULARY_H
 #define WORDTOVEC_VOCABULARY_H
 #include <vector>
+#include <unordered_map>
 #include "CorpusStream.h"
 #include "VocabularyWord.h"
 
@@ -12,6 +13,7 @@ class Vocabulary {
 private:
     vector<VocabularyWord*> vocabulary;
     vector<int> table;
+    unordered_map<string, int> wordMap;
     void constructHuffmanTree();
     void createUniGramTable();
     int MAX_CODE_LENGTH = 40;

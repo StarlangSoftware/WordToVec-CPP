@@ -14,7 +14,7 @@
 
 TEST_CASE("NeuralNetworkTest-testTrainEnglishCBow") {
     SemanticDataSet mc, rg, ws, av, men, mturk, rare;
-    auto * english = new Corpus("english-xs.txt");
+    auto* english = new Corpus("english-xs.txt");
     mc = SemanticDataSet("MC.txt");
     rg = SemanticDataSet("RG.txt");
     ws = SemanticDataSet("WS353.txt");

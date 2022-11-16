@@ -12,12 +12,6 @@ struct VocabularyWordComparatorAccordingToCount{
     }
 };
 
-struct VocabularyWordComparatorAccordingToName{
-    bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2){
-        return vocabularyWord1->getName() < vocabularyWord2->getName();
-    }
-};
-
 /**
  * Constructor for the {@link Vocabulary} class. For each distinct word in the corpus, a {@link VocabularyWord}
  * instance is created. After that, words are sorted according to their occurences. Unigram table is constructed,
@@ -42,7 +36,9 @@ Vocabulary::Vocabulary(AbstractCorpus* corpus) {
     std::stable_sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToCount());
     createUniGramTable();
     constructHuffmanTree();
-    std::stable_sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToName());
+    for (int i = 0; i < vocabulary.size(); i++){
+        wordMap[vocabulary[i]->getName()] = i;
+    }
 }
 
 /**
@@ -59,8 +55,7 @@ int Vocabulary::size() const{
  * @return Position of the word searched.
  */
 int Vocabulary::getPosition(VocabularyWord *word) const{
-    auto middle = lower_bound(vocabulary.begin(), vocabulary.end(), word, VocabularyWordComparatorAccordingToName());
-    return middle - vocabulary.begin();
+    return wordMap.at(word->getName());
 }
 
 /**

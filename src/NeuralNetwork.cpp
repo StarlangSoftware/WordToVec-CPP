@@ -23,7 +23,7 @@ NeuralNetwork::NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& p
     row = vocabulary.size();
     wordVectors = new double*[row];
     for (int i = 0; i < row; i++){
-        wordVectors[i] = new double [vectorLength];
+        wordVectors[i] = new double[vectorLength];
     }
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < vectorLength; j++) {
@@ -92,6 +92,7 @@ VectorizedDictionary NeuralNetwork::train() {
         }
         result.addWord(new VectorizedWord(vocabulary.getWord(i)->getName(), vector));
     }
+    result.sort();
     return result;
 }
 
@@ -274,7 +275,6 @@ void NeuralNetwork::trainSkipGram() {
     corpus->close();
 }
 
-NeuralNetwork::~NeuralNetwork() = default;
 
 int NeuralNetwork::vocabularySize() const {
     return vocabulary.size();

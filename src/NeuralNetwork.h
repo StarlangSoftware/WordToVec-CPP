@@ -29,7 +29,6 @@ private:
     double dotProduct(const double* vector1, const double* vector2) const;
 public:
     NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& parameter);
-    ~NeuralNetwork();
     int vocabularySize() const;
     VectorizedDictionary train();
 };
