@@ -5,6 +5,7 @@
 #include "Dictionary/Dictionary.h"
 #include "NeuralNetwork.h"
 #include "Iteration.h"
+#include <random>
 
 /**
  * Constructor for the {@link NeuralNetwork} class. Gets corpus and network parameters as input and sets the
@@ -13,12 +14,29 @@
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
  * @param parameter Parameters of the Word2Vec algorithm.
  */
-NeuralNetwork::NeuralNetwork(CorpusStream* corpus, const WordToVecParameter& parameter) {
+NeuralNetwork::NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& parameter) {
+    int row;
+    auto randomEngine = default_random_engine(parameter.getSeed());
+    srand(parameter.getSeed());
     this->vocabulary = Vocabulary(corpus);
     this->parameter = parameter;
+    vectorLength = parameter.getLayerSize();
     this->corpus = corpus;
-    wordVectors = Matrix(vocabulary.size(), parameter.getLayerSize(), -0.5, 0.5, default_random_engine(parameter.getSeed()));
-    wordVectorUpdate = Matrix(vocabulary.size(), parameter.getLayerSize());
+    row = vocabulary.size();
+    wordVectors = new double*[row];
+    for (int i = 0; i < row; i++){
+        wordVectors[i] = new double [vectorLength];
+    }
+    uniform_real_distribution <> distribution (-0.5, 0.5);
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < vectorLength; j++) {
+            wordVectors[i][j] = distribution(randomEngine);
+        }
+    }
+    wordVectorUpdate = new double*[row];
+    for (int i = 0; i < row; i++){
+        wordVectorUpdate[i] = new double[vectorLength];
+    }
     prepareExpTable();
 }
 
@@ -48,7 +66,10 @@ double NeuralNetwork::calculateG(double f, double alpha, double label) {
         if (f < -MAX_EXP){
             return label * alpha;
         } else {
-            return (label - expTable[(int) ((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]) * alpha;
+            int index = (int) ((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
+            if (index >= 0 && index < EXP_TABLE_SIZE){
+                return (label - expTable[index]) * alpha;
+            }
         }
     }
 }
@@ -59,16 +80,37 @@ double NeuralNetwork::calculateG(double f, double alpha, double label) {
  * @return Dictionary of word vectors.
  */
 VectorizedDictionary NeuralNetwork::train() {
-    VectorizedDictionary result = VectorizedDictionary(Comparator::TURKISH);
+    VectorizedDictionary result = VectorizedDictionary(Comparator::ENGLISH);
     if (parameter.isCbow()){
         trainCbow();
     } else {
         trainSkipGram();
     }
     for (int i = 0; i < vocabulary.size(); i++){
-        result.addWord(new VectorizedWord(vocabulary.getWord(i)->getName(), wordVectors.getRow(i)));
+        Vector vector = Vector((long) 0, 0);
+        for (int j = 0; j < vectorLength; j++){
+            vector.add(wordVectors[i][j]);
+        }
+        result.addWord(new VectorizedWord(vocabulary.getWord(i)->getName(), vector));
     }
     return result;
+}
+
+void NeuralNetwork::updateOutput(double* outputUpdate, const double* outputs, int l2, double g){
+    for (int j = 0; j < vectorLength; j++){
+        outputUpdate[j] += wordVectorUpdate[l2][j] * g;
+    }
+    for (int j = 0; j < vectorLength; j++){
+        wordVectorUpdate[l2][j] += outputs[j] * g;
+    }
+}
+
+double NeuralNetwork::dotProduct(const double* vector1, const double* vector2) const{
+    double sum = 0;
+    for (int j = 0; j < vectorLength; j++){
+        sum += vector1[j] * vector2[j];
+    }
+    return sum;
 }
 
 /**
@@ -82,38 +124,43 @@ void NeuralNetwork::trainCbow() {
     corpus->open();
     Sentence* currentSentence = corpus->getSentence();
     VocabularyWord* currentWord;
-    Vector outputs = Vector(parameter.getLayerSize(), 0);
-    Vector outputUpdate = Vector(parameter.getLayerSize(), 0);
+    auto* outputs = new double[vectorLength];
+    auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
         wordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition()));
         currentWord = vocabulary.getWord(wordIndex);
-        outputs.clear();
-        outputUpdate.clear();
+        for (int i = 0; i < vectorLength; i++){
+            outputs[i] = 0;
+            outputUpdate[i] = 0;
+        }
         b = random() % parameter.getWindow();
         cw = 0;
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++){
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
             if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
                 lastWordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(c));
-                outputs.add(wordVectors.getRow(lastWordIndex));
+                for (int j = 0; j < vectorLength; j++){
+                    outputs[j] += wordVectors[lastWordIndex][j];
+                }
                 cw++;
             }
         }
         if (cw > 0) {
-            outputs.divide(cw);
+            for (int j = 0; j < vectorLength; j++){
+                outputs[j] /= cw;
+            }
             if (parameter.isHierarchicalSoftMax()){
                 for (int d = 0; d < currentWord->getCodeLength(); d++) {
                     l2 = currentWord->getPoint(d);
-                    f = outputs.dotProduct(wordVectorUpdate.getRow(l2));
+                    f = dotProduct(outputs, wordVectorUpdate[l2]);
                     if (f <= -MAX_EXP || f >= MAX_EXP){
                         continue;
                     } else{
                         f = expTable[(int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))];
                     }
                     g = (1 - currentWord->getCode(d) - f) * iteration.getAlpha();
-                    outputUpdate.add(wordVectorUpdate.getRow(l2).product(g));
-                    wordVectorUpdate.add(l2, outputs.product(g));
+                    updateOutput(outputUpdate, outputs, l2, g);
                 }
             } else {
                 for (int d = 0; d < parameter.getNegativeSamplingSize() + 1; d++) {
@@ -129,17 +176,18 @@ void NeuralNetwork::trainCbow() {
                         label = 0;
                     }
                     l2 = target;
-                    f = outputs.dotProduct(wordVectorUpdate.getRow(l2));
+                    f = dotProduct(outputs, wordVectorUpdate[l2]);
                     g = calculateG(f, iteration.getAlpha(), label);
-                    outputUpdate.add(wordVectorUpdate.getRow(l2).product(g));
-                    wordVectorUpdate.add(l2, outputs.product(g));
+                    updateOutput(outputUpdate, outputs, l2, g);
                 }
             }
             for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++){
                 int c = iteration.getSentencePosition() - parameter.getWindow() + a;
                 if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
                     lastWordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(c));
-                    wordVectors.add(lastWordIndex, outputUpdate);
+                    for (int j = 0; j < vectorLength; j++){
+                        wordVectors[lastWordIndex][j] += outputUpdate[j];
+                    }
                 }
             }
         }
@@ -159,33 +207,34 @@ void NeuralNetwork::trainSkipGram() {
     corpus->open();
     Sentence* currentSentence = corpus->getSentence();
     VocabularyWord* currentWord;
-    Vector outputs = Vector(parameter.getLayerSize(), 0);
-    Vector outputUpdate = Vector(parameter.getLayerSize(), 0);
+    auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
         wordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition()));
         currentWord = vocabulary.getWord(wordIndex);
-        outputs.clear();
-        outputUpdate.clear();
+        for (int i = 0; i < vectorLength; i++){
+            outputUpdate[i] = 0;
+        }
         b = random() % parameter.getWindow();
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++) {
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
             if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
                 lastWordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(c));
                 l1 = lastWordIndex;
-                outputUpdate.clear();
+                for (int i = 0; i < vectorLength; i++){
+                    outputUpdate[i] = 0;
+                }
                 if (parameter.isHierarchicalSoftMax()) {
                     for (int d = 0; d < currentWord->getCodeLength(); d++) {
                         l2 = currentWord->getPoint(d);
-                        f = wordVectors.getRow(l1).dotProduct(wordVectorUpdate.getRow(l2));
+                        f = dotProduct(wordVectors[l1], wordVectorUpdate[l2]);
                         if (f <= -MAX_EXP || f >= MAX_EXP){
                             continue;
                         } else{
                             f = expTable[(int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))];
                         }
                         g = (1 - currentWord->getCode(d) - f) * iteration.getAlpha();
-                        outputUpdate.add(wordVectorUpdate.getRow(l2).product(g));
-                        wordVectorUpdate.add(l2, wordVectors.getRow(l1).product(g));
+                        updateOutput(outputUpdate, wordVectors[l1], l2, g);
                     }
                 } else {
                     for (int d = 0; d < parameter.getNegativeSamplingSize() + 1; d++) {
@@ -201,13 +250,14 @@ void NeuralNetwork::trainSkipGram() {
                             label = 0;
                         }
                         l2 = target;
-                        f = wordVectors.getRow(l1).dotProduct(wordVectorUpdate.getRow(l2));
+                        f = dotProduct(wordVectors[l1], wordVectorUpdate[l2]);
                         g = calculateG(f, iteration.getAlpha(), label);
-                        outputUpdate.add(wordVectorUpdate.getRow(l2).product(g));
-                        wordVectorUpdate.add(l2, wordVectors.getRow(l1).product(g));
+                        updateOutput(outputUpdate, wordVectors[l1], l2, g);
                     }
                 }
-                wordVectors.add(l1, outputUpdate);
+                for (int j = 0; j < vectorLength; j++){
+                    wordVectors[l1][j] += outputUpdate[j];
+                }
             }
         }
         currentSentence = iteration.sentenceUpdate(currentSentence);
@@ -215,5 +265,8 @@ void NeuralNetwork::trainSkipGram() {
     corpus->close();
 }
 
-NeuralNetwork::~NeuralNetwork() {
+NeuralNetwork::~NeuralNetwork() = default;
+
+int NeuralNetwork::vocabularySize() const {
+    return vocabulary.size();
 }

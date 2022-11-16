@@ -10,7 +10,7 @@
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
  * @param wordToVecParameter Parameters of the Word2Vec algorithm.
  */
-Iteration::Iteration(CorpusStream* corpus, const WordToVecParameter& parameter) {
+Iteration::Iteration(AbstractCorpus* corpus, const WordToVecParameter& parameter) {
     this->parameter = parameter;
     this->corpus = corpus;
     startingAlpha = parameter.getAlpha();
@@ -23,6 +23,7 @@ Iteration::Iteration(CorpusStream* corpus, const WordToVecParameter& parameter) 
 void Iteration::alphaUpdate(int totalNumberOfWords) {
     if (wordCount - lastWordCount > 10000) {
         wordCountActual += wordCount - lastWordCount;
+        cout << wordCountActual << endl;
         lastWordCount = wordCount;
         alpha = startingAlpha * (1 - wordCountActual / (parameter.getNumberOfIterations() * totalNumberOfWords + 1.0));
         if (alpha < startingAlpha * 0.0001)

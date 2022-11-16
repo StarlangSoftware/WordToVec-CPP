@@ -8,7 +8,7 @@
 
 struct VocabularyWordComparatorAccordingToCount{
     bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2){
-        return vocabularyWord1->getCount() < vocabularyWord2->getCount();
+        return vocabularyWord1->getCount() > vocabularyWord2->getCount();
     }
 };
 
@@ -24,7 +24,7 @@ struct VocabularyWordComparatorAccordingToName{
  * whereafter Huffman tree is created based on the number of occurences of the words.
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
  */
-Vocabulary::Vocabulary(CorpusStream* corpus) {
+Vocabulary::Vocabulary(AbstractCorpus* corpus) {
     CounterHashMap<string> counts = CounterHashMap<string>();
     corpus->open();
     Sentence* sentence = corpus->getSentence();

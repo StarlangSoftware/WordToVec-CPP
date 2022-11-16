@@ -15,10 +15,10 @@ private:
     void constructHuffmanTree();
     void createUniGramTable();
     int MAX_CODE_LENGTH = 40;
-    int totalNumberOfWords;
+    int totalNumberOfWords = 0;
 public:
     Vocabulary();
-    explicit Vocabulary(CorpusStream* corpus);
+    explicit Vocabulary(AbstractCorpus* corpus);
     int size() const;
     int getTotalNumberOfWords() const;
     int getPosition(VocabularyWord* word) const;

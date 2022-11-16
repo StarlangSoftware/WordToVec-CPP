@@ -13,20 +13,24 @@
 
 class NeuralNetwork {
 private:
-    Matrix wordVectors = Matrix(0), wordVectorUpdate = Matrix(0);
+    double** wordVectors, **wordVectorUpdate;
     Vocabulary vocabulary;
     WordToVecParameter parameter;
-    CorpusStream* corpus;
+    AbstractCorpus* corpus;
     vector<double> expTable;
+    int vectorLength;
     int EXP_TABLE_SIZE = 1000;
     int MAX_EXP = 6;
     void prepareExpTable();
     double calculateG(double f, double alpha, double label);
     void trainCbow();
     void trainSkipGram();
+    void updateOutput(double* outputUpdate, const double* outputs, int l2, double g);
+    double dotProduct(const double* vector1, const double* vector2) const;
 public:
-    NeuralNetwork(CorpusStream* corpus, const WordToVecParameter& parameter);
+    NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& parameter);
     ~NeuralNetwork();
+    int vocabularySize() const;
     VectorizedDictionary train();
 };
 

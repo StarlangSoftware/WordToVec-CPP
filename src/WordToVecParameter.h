@@ -14,7 +14,7 @@ private:
     int window = 5;
     bool hierarchicalSoftMax = false;
     int negativeSamplingSize = 5;
-    int numberOfIterations = 3;
+    int numberOfIterations = 2;
     int seed = 1;
 public:
     WordToVecParameter();
