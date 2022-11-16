@@ -5,7 +5,6 @@
 #include "Dictionary/Dictionary.h"
 #include "NeuralNetwork.h"
 #include "Iteration.h"
-#include <random>
 
 /**
  * Constructor for the {@link NeuralNetwork} class. Gets corpus and network parameters as input and sets the
@@ -16,7 +15,6 @@
  */
 NeuralNetwork::NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& parameter) {
     int row;
-    auto randomEngine = default_random_engine(parameter.getSeed());
     srand(parameter.getSeed());
     this->vocabulary = Vocabulary(corpus);
     this->parameter = parameter;
@@ -27,10 +25,9 @@ NeuralNetwork::NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& p
     for (int i = 0; i < row; i++){
         wordVectors[i] = new double [vectorLength];
     }
-    uniform_real_distribution <> distribution (-0.5, 0.5);
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < vectorLength; j++) {
-            wordVectors[i][j] = distribution(randomEngine);
+            wordVectors[i][j] = -0.5 + ((double)rand()) / RAND_MAX;
         }
     }
     wordVectorUpdate = new double*[row];
@@ -69,6 +66,8 @@ double NeuralNetwork::calculateG(double f, double alpha, double label) {
             int index = (int) ((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
             if (index >= 0 && index < EXP_TABLE_SIZE){
                 return (label - expTable[index]) * alpha;
+            } else {
+                return (label - 1) * alpha;
             }
         }
     }
@@ -134,7 +133,7 @@ void NeuralNetwork::trainCbow() {
             outputs[i] = 0;
             outputUpdate[i] = 0;
         }
-        b = random() % parameter.getWindow();
+        b = rand() % parameter.getWindow();
         cw = 0;
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++){
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
@@ -157,7 +156,12 @@ void NeuralNetwork::trainCbow() {
                     if (f <= -MAX_EXP || f >= MAX_EXP){
                         continue;
                     } else{
-                        f = expTable[(int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))];
+                        int index = (int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
+                        if (index >= 0 && index < EXP_TABLE_SIZE){
+                            f = expTable[index];
+                        } else {
+                            continue;
+                        }
                     }
                     g = (1 - currentWord->getCode(d) - f) * iteration.getAlpha();
                     updateOutput(outputUpdate, outputs, l2, g);
@@ -168,9 +172,9 @@ void NeuralNetwork::trainCbow() {
                         target = wordIndex;
                         label = 1;
                     } else {
-                        target = vocabulary.getTableValue(random() % vocabulary.getTableSize());
+                        target = vocabulary.getTableValue(rand() % vocabulary.getTableSize());
                         if (target == 0)
-                            target = random() % (vocabulary.size() - 1) + 1;
+                            target = rand() % (vocabulary.size() - 1) + 1;
                         if (target == wordIndex)
                             continue;
                         label = 0;
@@ -215,7 +219,7 @@ void NeuralNetwork::trainSkipGram() {
         for (int i = 0; i < vectorLength; i++){
             outputUpdate[i] = 0;
         }
-        b = random() % parameter.getWindow();
+        b = rand() % parameter.getWindow();
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++) {
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
             if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
@@ -231,7 +235,12 @@ void NeuralNetwork::trainSkipGram() {
                         if (f <= -MAX_EXP || f >= MAX_EXP){
                             continue;
                         } else{
-                            f = expTable[(int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))];
+                            int index = (int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
+                            if (index >= 0 && index < EXP_TABLE_SIZE){
+                                f = expTable[index];
+                            } else {
+                                continue;
+                            }
                         }
                         g = (1 - currentWord->getCode(d) - f) * iteration.getAlpha();
                         updateOutput(outputUpdate, wordVectors[l1], l2, g);
@@ -242,9 +251,9 @@ void NeuralNetwork::trainSkipGram() {
                             target = wordIndex;
                             label = 1;
                         } else {
-                            target = vocabulary.getTableValue(random() % vocabulary.getTableSize());
+                            target = vocabulary.getTableValue(rand() % vocabulary.getTableSize());
                             if (target == 0)
-                                target = random() % (vocabulary.size() - 1) + 1;
+                                target = rand() % (vocabulary.size() - 1) + 1;
                             if (target == wordIndex)
                                 continue;
                             label = 0;
