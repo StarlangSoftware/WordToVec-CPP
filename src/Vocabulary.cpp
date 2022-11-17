@@ -4,7 +4,7 @@
 
 #include "Vocabulary.h"
 #include "CounterHashMap.h"
-#include <math.h>
+#include <cmath>
 
 struct VocabularyWordComparatorAccordingToCount{
     bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2){
@@ -39,10 +39,10 @@ Vocabulary::Vocabulary(AbstractCorpus* corpus) {
     for (auto & count : counts){
         vocabulary.push_back(new VocabularyWord(count.first, count.second));
     }
-    std::stable_sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToCount());
+    sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToCount());
     createUniGramTable();
     constructHuffmanTree();
-    std::stable_sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToName());
+    sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToName());
     for (int i = 0; i < vocabulary.size(); i++){
         wordMap[vocabulary[i]->getName()] = i;
     }
