@@ -215,7 +215,8 @@ void NeuralNetwork::trainSkipGram() {
     auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
-        wordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition()));
+        auto* sentenceWord = (VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition());
+        wordIndex = vocabulary.getPosition(sentenceWord);
         currentWord = vocabulary.getWord(wordIndex);
         for (int i = 0; i < vectorLength; i++){
             outputUpdate[i] = 0;

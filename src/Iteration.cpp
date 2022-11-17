@@ -23,7 +23,6 @@ Iteration::Iteration(AbstractCorpus* corpus, const WordToVecParameter& parameter
 void Iteration::alphaUpdate(int totalNumberOfWords) {
     if (wordCount - lastWordCount > 10000) {
         wordCountActual += wordCount - lastWordCount;
-        cout << wordCountActual << endl;
         lastWordCount = wordCount;
         alpha = startingAlpha * (1 - wordCountActual / (parameter.getNumberOfIterations() * totalNumberOfWords + 1.0));
         if (alpha < startingAlpha * 0.0001)
@@ -47,6 +46,7 @@ Sentence* Iteration::sentenceUpdate(Sentence* currentSentence) {
         Sentence* sentence = corpus->getSentence();
         if (sentence == nullptr){
             iterationCount++;
+            cout << "Iteration " << iterationCount << endl;
             wordCount = 0;
             lastWordCount = 0;
             corpus->close();
