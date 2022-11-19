@@ -47,6 +47,7 @@ void NeuralNetwork::prepareExpTable() {
         expTable.push_back(exp((i / (EXP_TABLE_SIZE + 0.0) * 2 - 1) * MAX_EXP));
         expTable[i] = expTable[i] / (expTable[i] + 1);
     }
+    expTable.push_back(0.0);
 }
 
 /**
