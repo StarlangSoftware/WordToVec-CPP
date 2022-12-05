@@ -80,7 +80,7 @@ double NeuralNetwork::calculateG(double f, double alpha, double label) {
  * @return Dictionary of word vectors.
  */
 VectorizedDictionary NeuralNetwork::train() {
-    VectorizedDictionary result = VectorizedDictionary(Comparator::ENGLISH);
+    VectorizedDictionary result = VectorizedDictionary();
     if (parameter.isCbow()){
         trainCbow();
     } else {

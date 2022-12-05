@@ -48,7 +48,7 @@ TEST_CASE("NeuralNetworkTest-testWithWordVectors") {
     men = SemanticDataSet("MEN.txt");
     mturk = SemanticDataSet("MTurk771.txt");
     rare = SemanticDataSet("RareWords.txt");
-    VectorizedDictionary dictionary = VectorizedDictionary("vectors-english-xs.txt", Comparator::ENGLISH);
+    VectorizedDictionary dictionary = VectorizedDictionary("vectors-english-xs.txt");
     cout << dictionary.size() << endl;
     SemanticDataSet mc2 = mc.calculateSimilarities(dictionary);
     cout << "(" << mc.size() << ") " << mc.spearmanCorrelation(mc2) << endl;
