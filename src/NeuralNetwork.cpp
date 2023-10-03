@@ -44,8 +44,8 @@ NeuralNetwork::NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& p
 void NeuralNetwork::prepareExpTable() {
     expTable.reserve(EXP_TABLE_SIZE + 1);
     for (int i = 0; i < EXP_TABLE_SIZE; i++) {
-        expTable.push_back(exp((i / (EXP_TABLE_SIZE + 0.0) * 2 - 1) * MAX_EXP));
-        expTable[i] = expTable[i] / (expTable[i] + 1);
+        double value = exp((i / (EXP_TABLE_SIZE + 0.0) * 2 - 1) * MAX_EXP);
+        expTable.push_back(value / (value + 1));
     }
     expTable.push_back(0.0);
 }
