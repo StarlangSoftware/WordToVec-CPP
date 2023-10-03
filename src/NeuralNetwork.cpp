@@ -7,7 +7,7 @@
 #include "Iteration.h"
 
 /**
- * Constructor for the {@link NeuralNetwork} class. Gets corpus and network parameters as input and sets the
+ * Constructor for the NeuralNetwork class. Gets corpus and network parameters as input and sets the
  * corresponding parameters first. After that, initializes the network with random weights between -0.5 and 0.5.
  * Constructs vector update matrix and prepares the exp table.
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.

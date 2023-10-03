@@ -19,7 +19,7 @@ struct VocabularyWordComparatorAccordingToName{
 };
 
 /**
- * Constructor for the {@link Vocabulary} class. For each distinct word in the corpus, a {@link VocabularyWord}
+ * Constructor for the Vocabulary class. For each distinct word in the corpus, a VocabularyWord
  * instance is created. After that, words are sorted according to their occurences. Unigram table is constructed,
  * whereafter Huffman tree is created based on the number of occurences of the words.
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.

@@ -5,7 +5,7 @@
 #include "VocabularyWord.h"
 
 /**
- * Constructor for a {@link VocabularyWord}. The constructor gets name and count values and sets the corresponding
+ * Constructor for a VocabularyWord. The constructor gets name and count values and sets the corresponding
  * attributes. It also initializes the code and point arrays for this word.
  * @param name Lemma of the word
  * @param count Number of occurences of this word in the corpus
