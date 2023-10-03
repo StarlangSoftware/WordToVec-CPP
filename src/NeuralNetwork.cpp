@@ -15,7 +15,7 @@
  */
 NeuralNetwork::NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& parameter) {
     int row;
-    srand(parameter.getSeed());
+    srandom(parameter.getSeed());
     this->vocabulary = Vocabulary(corpus);
     this->parameter = parameter;
     vectorLength = parameter.getLayerSize();
@@ -27,7 +27,7 @@ NeuralNetwork::NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& p
     }
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < vectorLength; j++) {
-            wordVectors[i][j] = -0.5 + ((double)rand()) / RAND_MAX;
+            wordVectors[i][j] = -0.5 + ((double)random()) / RAND_MAX;
         }
     }
     wordVectorUpdate = new double*[row];
@@ -135,7 +135,7 @@ void NeuralNetwork::trainCbow() {
             outputs[i] = 0;
             outputUpdate[i] = 0;
         }
-        b = rand() % parameter.getWindow();
+        b = random() % parameter.getWindow();
         cw = 0;
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++){
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
@@ -174,9 +174,9 @@ void NeuralNetwork::trainCbow() {
                         target = wordIndex;
                         label = 1;
                     } else {
-                        target = vocabulary.getTableValue(rand() % vocabulary.getTableSize());
+                        target = vocabulary.getTableValue(random() % vocabulary.getTableSize());
                         if (target == 0)
-                            target = rand() % (vocabulary.size() - 1) + 1;
+                            target = random() % (vocabulary.size() - 1) + 1;
                         if (target == wordIndex)
                             continue;
                         label = 0;
@@ -222,7 +222,7 @@ void NeuralNetwork::trainSkipGram() {
         for (int i = 0; i < vectorLength; i++){
             outputUpdate[i] = 0;
         }
-        b = rand() % parameter.getWindow();
+        b = random() % parameter.getWindow();
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++) {
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
             if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
@@ -254,9 +254,9 @@ void NeuralNetwork::trainSkipGram() {
                             target = wordIndex;
                             label = 1;
                         } else {
-                            target = vocabulary.getTableValue(rand() % vocabulary.getTableSize());
+                            target = vocabulary.getTableValue(random() % vocabulary.getTableSize());
                             if (target == 0)
-                                target = rand() % (vocabulary.size() - 1) + 1;
+                                target = random() % (vocabulary.size() - 1) + 1;
                             if (target == wordIndex)
                                 continue;
                             label = 0;

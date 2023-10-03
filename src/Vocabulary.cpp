@@ -78,19 +78,19 @@ VocabularyWord *Vocabulary::getWord(int index) const{
  * Constructs Huffman Tree based on the number of occurences of the words.
  */
 void Vocabulary::constructHuffmanTree() {
-    int min1i, min2i, b, i;
-    int* count = new int[vocabulary.size() * 2 + 1];
+    int min1i, min2i, b, i, size = vocabulary.size();
+    int* count = new int[size * 2 + 1];
     int* code = new int[MAX_CODE_LENGTH];
     int* point = new int[MAX_CODE_LENGTH];
-    int* binary = new int[vocabulary.size() * 2 + 1];
-    int* parentNode = new int[vocabulary.size() * 2 + 1];
-    for (int a = 0; a < vocabulary.size(); a++)
+    int* binary = new int[size * 2 + 1];
+    int* parentNode = new int[size * 2 + 1];
+    for (int a = 0; a < size; a++)
         count[a] = vocabulary.at(a)->getCount();
-    for (int a = vocabulary.size(); a < vocabulary.size() * 2; a++)
+    for (int a = size; a < size * 2; a++)
         count[a] = 1000000000;
-    int pos1 = vocabulary.size() - 1;
-    int pos2 = vocabulary.size();
-    for (int a = 0; a < vocabulary.size() - 1; a++) {
+    int pos1 = size - 1;
+    int pos2 = size;
+    for (int a = 0; a < size - 1; a++) {
         if (pos1 >= 0) {
             if (count[pos1] < count[pos2]) {
                 min1i = pos1;
@@ -116,11 +116,11 @@ void Vocabulary::constructHuffmanTree() {
             pos2++;
         }
         count[vocabulary.size() + a] = count[min1i] + count[min2i];
-        parentNode[min1i] = vocabulary.size() + a;
-        parentNode[min2i] = vocabulary.size() + a;
+        parentNode[min1i] = size + a;
+        parentNode[min2i] = size + a;
         binary[min2i] = 1;
     }
-    for (int a = 0; a < vocabulary.size(); a++) {
+    for (int a = 0; a < size; a++) {
         b = a;
         i = 0;
         while (true) {
@@ -132,10 +132,10 @@ void Vocabulary::constructHuffmanTree() {
                 break;
         }
         vocabulary.at(a)->setCodeLength(i);
-        vocabulary.at(a)->setPoint(0, vocabulary.size() - 2);
+        vocabulary.at(a)->setPoint(0, size - 2);
         for (b = 0; b < i; b++) {
             vocabulary.at(a)->setCode(i - b - 1, code[b]);
-            vocabulary.at(a)->setPoint(i - b, point[b] - vocabulary.size());
+            vocabulary.at(a)->setPoint(i - b, point[b] - size);
         }
     }
     delete[] count;
@@ -146,7 +146,7 @@ void Vocabulary::constructHuffmanTree() {
 }
 
 /**
- * Constructs the unigram table based on the number of occurences of the words.
+ * Constructs the unigram table based on the number of occurrences of the words.
  */
 void Vocabulary::createUniGramTable() {
     int i;
