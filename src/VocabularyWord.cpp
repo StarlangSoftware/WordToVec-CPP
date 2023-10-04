@@ -29,8 +29,6 @@ int VocabularyWord::getCount() const{
  */
 void VocabularyWord::setCodeLength(int _codeLength) {
     this->codeLength = _codeLength;
-    this->code.resize(_codeLength);
-    this->point.resize(_codeLength);
 }
 
 /**

@@ -80,8 +80,8 @@ VocabularyWord *Vocabulary::getWord(int index) const{
 void Vocabulary::constructHuffmanTree() {
     int min1i, min2i, b, i, size = vocabulary.size();
     int* count = new int[size * 2 + 1];
-    int* code = new int[MAX_CODE_LENGTH];
-    int* point = new int[MAX_CODE_LENGTH];
+    int* code = new int[40];
+    int* point = new int[40];
     int* binary = new int[size * 2 + 1];
     int* parentNode = new int[size * 2 + 1];
     for (int a = 0; a < size; a++)

@@ -10,8 +10,8 @@
 class VocabularyWord : public Word{
 private:
     int count;
-    vector<int> code;
-    vector<int> point;
+    int code[40];
+    int point[40];
     int codeLength;
 public:
     VocabularyWord(const string& name, int count);

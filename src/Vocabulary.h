@@ -16,7 +16,6 @@ private:
     unordered_map<string, int> wordMap;
     void constructHuffmanTree();
     void createUniGramTable();
-    int MAX_CODE_LENGTH = 40;
     int totalNumberOfWords = 0;
 public:
     Vocabulary();
