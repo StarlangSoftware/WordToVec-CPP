@@ -125,6 +125,7 @@ void NeuralNetwork::trainCbow() {
     corpus->open();
     Sentence* currentSentence = corpus->getSentence();
     VocabularyWord* currentWord;
+    srandom(parameter.getSeed());
     auto* outputs = new double[vectorLength];
     auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
@@ -213,6 +214,7 @@ void NeuralNetwork::trainSkipGram() {
     corpus->open();
     Sentence* currentSentence = corpus->getSentence();
     VocabularyWord* currentWord;
+    srandom(parameter.getSeed());
     auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
