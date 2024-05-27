@@ -97,6 +97,14 @@ VectorizedDictionary NeuralNetwork::train() {
     return result;
 }
 
+/**
+ * Calculate the update of outputs for word indexed with l2. It also calculates the word vector updates for word
+ * indexed at l2.
+ * @param outputUpdate Output update to be added.
+ * @param outputs Current outputs.
+ * @param l2 Index of the input
+ * @param g Multiplier for the update.
+ */
 void NeuralNetwork::updateOutput(double* outputUpdate, const double* outputs, int l2, double g){
     for (int j = 0; j < vectorLength; j++){
         outputUpdate[j] += wordVectorUpdate[l2][j] * g;
@@ -106,6 +114,12 @@ void NeuralNetwork::updateOutput(double* outputUpdate, const double* outputs, in
     }
 }
 
+/**
+ * Calculates the dot product of two vectors represented as array of doubles.
+ * @param vector1 First vector to multiply.
+ * @param vector2 Second vector to multiply.
+ * @return Dot product of two given vectors.
+ */
 double NeuralNetwork::dotProduct(const double* vector1, const double* vector2) const{
     double sum = 0;
     for (int j = 0; j < vectorLength; j++){
@@ -279,7 +293,10 @@ void NeuralNetwork::trainSkipGram() {
     corpus->close();
 }
 
-
+/**
+ * Returns the vocabulary size.
+ * @return The vocabulary size.
+ */
 int NeuralNetwork::vocabularySize() const {
     return vocabulary.size();
 }

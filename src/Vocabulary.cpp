@@ -186,6 +186,10 @@ int Vocabulary::getTableSize() const{
     return table.size();
 }
 
+/**
+ * Accessor for the total number of words
+ * @return Total number of words
+ */
 int Vocabulary::getTotalNumberOfWords() const {
     return totalNumberOfWords;
 }

@@ -121,10 +121,18 @@ void WordToVecParameter::setNegativeSamplingSize(int negativeSamplingSize) {
     this->negativeSamplingSize = negativeSamplingSize;
 }
 
+/**
+ * Mutator for the numberOfIterations attribute.
+ * @param numberOfIterations New number of iterations.
+ */
 void WordToVecParameter::setNumberOfIterations(int numberOfIterations) {
     this->numberOfIterations = numberOfIterations;
 }
 
+/**
+ * Mutator for the seed attribute.
+ * @param seed New number of seed.
+ */
 void WordToVecParameter::setSeed(int seed) {
     this->seed = seed;
 }

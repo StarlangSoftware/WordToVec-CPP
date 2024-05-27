@@ -7,6 +7,10 @@
 #include "Dictionary/Word.h"
 #include "SemanticDataSet.h"
 
+/**
+ * Constructor for the semantic dataset. Reads word pairs and their similarity scores from an input file.
+ * @param fileName Input file that stores the word pair and similarity scores.
+ */
 SemanticDataSet::SemanticDataSet(const string &fileName) {
     ifstream inputStream;
     inputStream.open(fileName, ifstream::in);
@@ -19,6 +23,12 @@ SemanticDataSet::SemanticDataSet(const string &fileName) {
     inputStream.close();
 }
 
+/**
+ * Calculates the similarities between words in the dataset. The word vectors will be taken from the input
+ * vectorized dictionary.
+ * @param dictionary Vectorized dictionary that stores the word vectors.
+ * @return Word pairs and their calculated similarities stored as a semantic dataset.
+ */
 SemanticDataSet SemanticDataSet::calculateSimilarities(VectorizedDictionary &dictionary) {
     SemanticDataSet result = SemanticDataSet();
     double similarity;
@@ -38,14 +48,27 @@ SemanticDataSet SemanticDataSet::calculateSimilarities(VectorizedDictionary &dic
     return result;
 }
 
+/**
+ * Returns the size of the semantic dataset.
+ * @return The size of the semantic dataset.
+ */
 int SemanticDataSet::size() const{
     return pairs.size();
 }
 
+/**
+ * Sorts the word pairs in the dataset according to the WordPairComparator.
+ */
 void SemanticDataSet::sort() {
     std::sort(pairs.begin(), pairs.end());
 }
 
+/**
+ * Finds and returns the index of a word pair in the pairs array list. If there is no such word pair, it
+ * returns -1.
+ * @param wordPair Word pair to search in the semantic dataset.
+ * @return Index of the given word pair in the pairs array list. If it does not exist, the method returns -1.
+ */
 int SemanticDataSet::index(const WordPair &wordPair) {
     for (int i = 0; i < pairs.size(); i++){
         if (wordPair == pairs[i]){
@@ -55,6 +78,11 @@ int SemanticDataSet::index(const WordPair &wordPair) {
     return -1;
 }
 
+/**
+ * Calculates the Spearman correlation coefficient with this dataset to the given semantic dataset.
+ * @param semanticDataSet Given semantic dataset with which Spearman correlation coefficient is calculated.
+ * @return Spearman correlation coefficient with the given semantic dataset.
+ */
 double SemanticDataSet::spearmanCorrelation(SemanticDataSet &semanticDataSet) {
     double sum = 0;
     int rank1, rank2;
@@ -73,4 +101,7 @@ double SemanticDataSet::spearmanCorrelation(SemanticDataSet &semanticDataSet) {
     return 1 - ratio;
 }
 
+/**
+ * Empty constructor for the semantic dataset.
+ */
 SemanticDataSet::SemanticDataSet() = default;
