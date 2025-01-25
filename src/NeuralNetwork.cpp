@@ -57,7 +57,7 @@ void NeuralNetwork::prepareExpTable() {
  * @param label Label of the instance.
  * @return Calculated G value.
  */
-double NeuralNetwork::calculateG(double f, double alpha, double label) {
+double NeuralNetwork::calculateG(double f, double alpha, double label) const {
     if (f > MAX_EXP){
         return (label - 1) * alpha;
     } else {
@@ -105,7 +105,7 @@ VectorizedDictionary NeuralNetwork::train() {
  * @param l2 Index of the input
  * @param g Multiplier for the update.
  */
-void NeuralNetwork::updateOutput(double* outputUpdate, const double* outputs, int l2, double g){
+void NeuralNetwork::updateOutput(double* outputUpdate, const double* outputs, int l2, double g) const {
     for (int j = 0; j < vectorLength; j++){
         outputUpdate[j] += wordVectorUpdate[l2][j] * g;
     }
@@ -131,7 +131,7 @@ double NeuralNetwork::dotProduct(const double* vector1, const double* vector2) c
 /**
  * Main method for training the CBow version of Word2Vec algorithm.
  */
-void NeuralNetwork::trainCbow() {
+void NeuralNetwork::trainCbow() const {
     int wordIndex, lastWordIndex;
     Iteration iteration = Iteration(corpus, parameter);
     int target, label, l2, b, cw;
@@ -220,7 +220,7 @@ void NeuralNetwork::trainCbow() {
 /**
  * Main method for training the SkipGram version of Word2Vec algorithm.
  */
-void NeuralNetwork::trainSkipGram() {
+void NeuralNetwork::trainSkipGram() const {
     int wordIndex, lastWordIndex;
     Iteration iteration = Iteration(corpus, parameter);
     int target, label, l1, l2, b;

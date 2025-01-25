@@ -7,13 +7,13 @@
 #include <cmath>
 
 struct VocabularyWordComparatorAccordingToCount{
-    bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2){
+    bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2) const {
         return vocabularyWord1->getCount() > vocabularyWord2->getCount();
     }
 };
 
 struct VocabularyWordComparatorAccordingToName{
-    bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2){
+    bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2) const {
         return vocabularyWord1->getName() < vocabularyWord2->getName();
     }
 };
@@ -77,7 +77,7 @@ VocabularyWord *Vocabulary::getWord(int index) const{
 /**
  * Constructs Huffman Tree based on the number of occurences of the words.
  */
-void Vocabulary::constructHuffmanTree() {
+void Vocabulary::constructHuffmanTree() const {
     int min1i, min2i, b, i, size = vocabulary.size();
     int* count = new int[size * 2 + 1];
     int* code = new int[40];

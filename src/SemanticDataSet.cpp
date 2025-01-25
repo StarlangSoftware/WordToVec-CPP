@@ -4,7 +4,7 @@
 
 #include <fstream>
 #include <iostream>
-#include "Dictionary/Word.h"
+#include "StringUtils.h"
 #include "SemanticDataSet.h"
 
 /**
@@ -17,7 +17,7 @@ SemanticDataSet::SemanticDataSet(const string &fileName) {
     string line;
     while (inputStream.good()){
         getline(inputStream, line);
-        vector<string> items = Word::split(line);
+        vector<string> items = StringUtils::split(line);
         pairs.emplace_back(items[0], items[1], stof(items[2]));
     }
     inputStream.close();
@@ -39,7 +39,7 @@ SemanticDataSet SemanticDataSet::calculateSimilarities(VectorizedDictionary &dic
         auto* vectorizedWord2 = (VectorizedWord*) dictionary.getWord(word2);
         if (vectorizedWord1 != nullptr && vectorizedWord2 != nullptr){
             similarity = vectorizedWord1->getVector().cosineSimilarity(vectorizedWord2->getVector());
-            result.pairs.push_back(WordPair(word1, word2, similarity));
+            result.pairs.emplace_back(word1, word2, similarity);
         } else {
             pairs.erase(pairs.begin() + i);
             i--;
@@ -69,7 +69,7 @@ void SemanticDataSet::sort() {
  * @param wordPair Word pair to search in the semantic dataset.
  * @return Index of the given word pair in the pairs array list. If it does not exist, the method returns -1.
  */
-int SemanticDataSet::index(const WordPair &wordPair) {
+int SemanticDataSet::index(const WordPair &wordPair) const {
     for (int i = 0; i < pairs.size(); i++){
         if (wordPair == pairs[i]){
             return i;

@@ -14,7 +14,7 @@ private:
     vector<VocabularyWord*> vocabulary;
     vector<int> table;
     unordered_map<string, int> wordMap;
-    void constructHuffmanTree();
+    void constructHuffmanTree() const;
     void createUniGramTable();
     int totalNumberOfWords = 0;
 public:

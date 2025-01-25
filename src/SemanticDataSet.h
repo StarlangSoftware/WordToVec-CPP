@@ -18,7 +18,7 @@ public:
     SemanticDataSet calculateSimilarities(VectorizedDictionary& dictionary);
     int size() const;
     void sort();
-    int index(const WordPair& wordPair);
+    int index(const WordPair& wordPair) const;
     double spearmanCorrelation(SemanticDataSet& semanticDataSet);
 };
 

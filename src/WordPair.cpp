@@ -26,7 +26,7 @@ double WordPair::getRelatedBy() const {
 
 /**
  * Mutator for the similarity score.
- * @param relatedBy New similarity score
+ * @param _relatedBy New similarity score
  */
 void WordPair::setRelatedBy(double _relatedBy) {
     relatedBy = _relatedBy;

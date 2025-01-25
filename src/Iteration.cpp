@@ -8,7 +8,7 @@
  * Constructor for the Iteration class. Get corpus and parameter as input, sets the corresponding
  * parameters.
  * @param corpus Corpus used to train word vectors using Word2Vec algorithm.
- * @param wordToVecParameter Parameters of the Word2Vec algorithm.
+ * @param parameter Parameters of the Word2Vec algorithm.
  */
 Iteration::Iteration(AbstractCorpus* corpus, const WordToVecParameter& parameter) {
     this->parameter = parameter;
