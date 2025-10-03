@@ -3,6 +3,9 @@
 //
 
 #include "Vocabulary.h"
+
+#include <algorithm>
+
 #include "CounterHashMap.h"
 #include <cmath>
 

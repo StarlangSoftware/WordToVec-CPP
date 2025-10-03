@@ -87,7 +87,7 @@ VectorizedDictionary NeuralNetwork::train() {
         trainSkipGram();
     }
     for (int i = 0; i < vocabulary.size(); i++){
-        Vector vector = Vector((long) 0, 0);
+        Vector vector = Vector((unsigned long) 0, 0);
         for (int j = 0; j < vectorLength; j++){
             vector.add(wordVectors[i][j]);
         }

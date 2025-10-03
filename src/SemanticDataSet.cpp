@@ -7,6 +7,8 @@
 #include "StringUtils.h"
 #include "SemanticDataSet.h"
 
+#include <algorithm>
+
 /**
  * Constructor for the semantic dataset. Reads word pairs and their similarity scores from an input file.
  * @param fileName Input file that stores the word pair and similarity scores.
