@@ -144,7 +144,7 @@ void NeuralNetwork::trainCbow() const {
     auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
-        wordIndex = vocabulary.getPosition(dynamic_cast<VocabularyWord *>(currentSentence->getWord(iteration.getSentencePosition())));
+        wordIndex = vocabulary.getPosition((VocabularyWord *)(currentSentence->getWord(iteration.getSentencePosition())));
         currentWord = vocabulary.getWord(wordIndex);
         for (int i = 0; i < vectorLength; i++){
             outputs[i] = 0;
@@ -155,7 +155,7 @@ void NeuralNetwork::trainCbow() const {
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++){
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
             if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
-                lastWordIndex = vocabulary.getPosition(dynamic_cast<VocabularyWord *>(currentSentence->getWord(c)));
+                lastWordIndex = vocabulary.getPosition((VocabularyWord *)(currentSentence->getWord(c)));
                 for (int j = 0; j < vectorLength; j++){
                     outputs[j] += wordVectors[lastWordIndex][j];
                 }
@@ -205,7 +205,7 @@ void NeuralNetwork::trainCbow() const {
             for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++){
                 int c = iteration.getSentencePosition() - parameter.getWindow() + a;
                 if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
-                    lastWordIndex = vocabulary.getPosition(dynamic_cast<VocabularyWord *>(currentSentence->getWord(c)));
+                    lastWordIndex = vocabulary.getPosition((VocabularyWord *)(currentSentence->getWord(c)));
                     for (int j = 0; j < vectorLength; j++){
                         wordVectors[lastWordIndex][j] += outputUpdate[j];
                     }
@@ -232,7 +232,7 @@ void NeuralNetwork::trainSkipGram() const {
     auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
-        auto* sentenceWord = dynamic_cast<VocabularyWord *>(currentSentence->getWord(iteration.getSentencePosition()));
+        auto* sentenceWord = (VocabularyWord *)(currentSentence->getWord(iteration.getSentencePosition()));
         wordIndex = vocabulary.getPosition(sentenceWord);
         currentWord = vocabulary.getWord(wordIndex);
         for (int i = 0; i < vectorLength; i++){
@@ -242,7 +242,7 @@ void NeuralNetwork::trainSkipGram() const {
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++) {
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
             if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
-                lastWordIndex = vocabulary.getPosition(dynamic_cast<VocabularyWord *>(currentSentence->getWord(c)));
+                lastWordIndex = vocabulary.getPosition((VocabularyWord *)(currentSentence->getWord(c)));
                 l1 = lastWordIndex;
                 for (int i = 0; i < vectorLength; i++){
                     outputUpdate[i] = 0;
