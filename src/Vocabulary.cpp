@@ -7,16 +7,15 @@
 #include <algorithm>
 
 #include "CounterHashMap.h"
-#include <cmath>
 
 struct VocabularyWordComparatorAccordingToCount{
-    bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2) const {
+    bool operator() (const VocabularyWord* vocabularyWord1, const VocabularyWord* vocabularyWord2) const {
         return vocabularyWord1->getCount() > vocabularyWord2->getCount();
     }
 };
 
 struct VocabularyWordComparatorAccordingToName{
-    bool operator() (VocabularyWord* vocabularyWord1, VocabularyWord* vocabularyWord2) const {
+    bool operator() (const VocabularyWord* vocabularyWord1, const VocabularyWord* vocabularyWord2) const {
         return vocabularyWord1->getName() < vocabularyWord2->getName();
     }
 };
@@ -42,10 +41,10 @@ Vocabulary::Vocabulary(AbstractCorpus* corpus) {
     for (auto & count : counts){
         vocabulary.push_back(new VocabularyWord(count.first, count.second));
     }
-    sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToCount());
+    ranges::sort(vocabulary, VocabularyWordComparatorAccordingToCount());
     createUniGramTable();
     constructHuffmanTree();
-    sort(vocabulary.begin(), vocabulary.end(), VocabularyWordComparatorAccordingToName());
+    ranges::sort(vocabulary, VocabularyWordComparatorAccordingToName());
     for (int i = 0; i < vocabulary.size(); i++){
         wordMap[vocabulary[i]->getName()] = i;
     }
@@ -64,7 +63,7 @@ int Vocabulary::size() const{
  * @param word Word to be searched.
  * @return Position of the word searched.
  */
-int Vocabulary::getPosition(VocabularyWord *word) const{
+int Vocabulary::getPosition(const VocabularyWord *word) const{
     return wordMap.at(word->getName());
 }
 

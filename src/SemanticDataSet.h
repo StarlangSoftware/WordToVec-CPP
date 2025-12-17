@@ -16,9 +16,9 @@ public:
     SemanticDataSet();
     explicit SemanticDataSet(const string& fileName);
     SemanticDataSet calculateSimilarities(VectorizedDictionary& dictionary);
-    int size() const;
+    [[nodiscard]] int size() const;
     void sort();
-    int index(const WordPair& wordPair) const;
+    [[nodiscard]] int index(const WordPair& wordPair) const;
     double spearmanCorrelation(SemanticDataSet& semanticDataSet);
 };
 

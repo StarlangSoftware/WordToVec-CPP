@@ -15,13 +15,13 @@ private:
     int codeLength;
 public:
     VocabularyWord(const string& name, int count);
-    int getCount() const;
+    [[nodiscard]] int getCount() const;
     void setCodeLength(int _codeLength);
     void setCode(int index, int value);
     void setPoint(int index, int value);
-    int getCodeLength() const;
-    int getPoint(int index) const;
-    int getCode(int index) const;
+    [[nodiscard]] int getCodeLength() const;
+    [[nodiscard]] int getPoint(int index) const;
+    [[nodiscard]] int getCode(int index) const;
 };
 
 

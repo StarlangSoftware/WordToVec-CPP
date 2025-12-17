@@ -21,9 +21,9 @@ public:
     explicit Iteration(AbstractCorpus* corpus, const WordToVecParameter& parameter);
     void alphaUpdate(int totalNumberOfWords);
     Sentence* sentenceUpdate(Sentence* currentSentence);
-    double getAlpha() const;
-    int getIterationCount() const;
-    int getSentencePosition() const;
+    [[nodiscard]] double getAlpha() const;
+    [[nodiscard]] int getIterationCount() const;
+    [[nodiscard]] int getSentencePosition() const;
 };
 
 

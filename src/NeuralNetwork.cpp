@@ -27,7 +27,7 @@ NeuralNetwork::NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& p
     }
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < vectorLength; j++) {
-            wordVectors[i][j] = -0.5 + ((double)random()) / RAND_MAX;
+            wordVectors[i][j] = -0.5 + static_cast<double>(random()) / RAND_MAX;
         }
     }
     wordVectorUpdate = new double*[row];
@@ -64,7 +64,7 @@ double NeuralNetwork::calculateG(double f, double alpha, double label) const {
         if (f < -MAX_EXP){
             return label * alpha;
         } else {
-            int index = (int) ((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
+            int index = static_cast<int>((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
             if (index >= 0 && index < EXP_TABLE_SIZE){
                 return (label - expTable[index]) * alpha;
             } else {
@@ -79,7 +79,7 @@ double NeuralNetwork::calculateG(double f, double alpha, double label) const {
  * is applied.
  * @return Dictionary of word vectors.
  */
-VectorizedDictionary NeuralNetwork::train() {
+VectorizedDictionary NeuralNetwork::train() const {
     VectorizedDictionary result = VectorizedDictionary();
     if (parameter.isCbow()){
         trainCbow();
@@ -87,7 +87,7 @@ VectorizedDictionary NeuralNetwork::train() {
         trainSkipGram();
     }
     for (int i = 0; i < vocabulary.size(); i++){
-        Vector vector = Vector((unsigned long) 0, 0);
+        Vector vector = Vector(static_cast<unsigned long>(0), 0);
         for (int j = 0; j < vectorLength; j++){
             vector.add(wordVectors[i][j]);
         }
@@ -144,7 +144,7 @@ void NeuralNetwork::trainCbow() const {
     auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
-        wordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition()));
+        wordIndex = vocabulary.getPosition(dynamic_cast<VocabularyWord *>(currentSentence->getWord(iteration.getSentencePosition())));
         currentWord = vocabulary.getWord(wordIndex);
         for (int i = 0; i < vectorLength; i++){
             outputs[i] = 0;
@@ -155,7 +155,7 @@ void NeuralNetwork::trainCbow() const {
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++){
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
             if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
-                lastWordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(c));
+                lastWordIndex = vocabulary.getPosition(dynamic_cast<VocabularyWord *>(currentSentence->getWord(c)));
                 for (int j = 0; j < vectorLength; j++){
                     outputs[j] += wordVectors[lastWordIndex][j];
                 }
@@ -173,7 +173,7 @@ void NeuralNetwork::trainCbow() const {
                     if (f <= -MAX_EXP || f >= MAX_EXP){
                         continue;
                     } else{
-                        int index = (int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
+                        int index = static_cast<int>((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
                         if (index >= 0 && index < EXP_TABLE_SIZE){
                             f = expTable[index];
                         } else {
@@ -205,7 +205,7 @@ void NeuralNetwork::trainCbow() const {
             for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++){
                 int c = iteration.getSentencePosition() - parameter.getWindow() + a;
                 if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
-                    lastWordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(c));
+                    lastWordIndex = vocabulary.getPosition(dynamic_cast<VocabularyWord *>(currentSentence->getWord(c)));
                     for (int j = 0; j < vectorLength; j++){
                         wordVectors[lastWordIndex][j] += outputUpdate[j];
                     }
@@ -232,7 +232,7 @@ void NeuralNetwork::trainSkipGram() const {
     auto* outputUpdate = new double[vectorLength];
     while (iteration.getIterationCount() < parameter.getNumberOfIterations()) {
         iteration.alphaUpdate(vocabulary.getTotalNumberOfWords());
-        auto* sentenceWord = (VocabularyWord*) currentSentence->getWord(iteration.getSentencePosition());
+        auto* sentenceWord = dynamic_cast<VocabularyWord *>(currentSentence->getWord(iteration.getSentencePosition()));
         wordIndex = vocabulary.getPosition(sentenceWord);
         currentWord = vocabulary.getWord(wordIndex);
         for (int i = 0; i < vectorLength; i++){
@@ -242,7 +242,7 @@ void NeuralNetwork::trainSkipGram() const {
         for (int a = b; a < parameter.getWindow() * 2 + 1 - b; a++) {
             int c = iteration.getSentencePosition() - parameter.getWindow() + a;
             if (a != parameter.getWindow() && currentSentence->safeIndex(c)) {
-                lastWordIndex = vocabulary.getPosition((VocabularyWord*) currentSentence->getWord(c));
+                lastWordIndex = vocabulary.getPosition(dynamic_cast<VocabularyWord *>(currentSentence->getWord(c)));
                 l1 = lastWordIndex;
                 for (int i = 0; i < vectorLength; i++){
                     outputUpdate[i] = 0;
@@ -254,7 +254,7 @@ void NeuralNetwork::trainSkipGram() const {
                         if (f <= -MAX_EXP || f >= MAX_EXP){
                             continue;
                         } else{
-                            int index = (int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
+                            int index = static_cast<int>((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2));
                             if (index >= 0 && index < EXP_TABLE_SIZE){
                                 f = expTable[index];
                             } else {

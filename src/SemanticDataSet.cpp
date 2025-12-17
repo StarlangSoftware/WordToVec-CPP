@@ -37,8 +37,8 @@ SemanticDataSet SemanticDataSet::calculateSimilarities(VectorizedDictionary &dic
     for (int i = 0; i < pairs.size(); i++){
         string word1 = pairs[i].getWord1();
         string word2 = pairs[i].getWord2();
-        auto* vectorizedWord1 = (VectorizedWord*) dictionary.getWord(word1);
-        auto* vectorizedWord2 = (VectorizedWord*) dictionary.getWord(word2);
+        auto* vectorizedWord1 = dynamic_cast<VectorizedWord *>(dictionary.getWord(word1));
+        auto* vectorizedWord2 = dynamic_cast<VectorizedWord *>(dictionary.getWord(word2));
         if (vectorizedWord1 != nullptr && vectorizedWord2 != nullptr){
             similarity = vectorizedWord1->getVector().cosineSimilarity(vectorizedWord2->getVector());
             result.pairs.emplace_back(word1, word2, similarity);

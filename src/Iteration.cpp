@@ -4,6 +4,8 @@
 
 #include "Iteration.h"
 
+#include <iostream>
+
 /**
  * Constructor for the Iteration class. Get corpus and parameter as input, sets the corresponding
  * parameters.

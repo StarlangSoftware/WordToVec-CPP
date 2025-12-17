@@ -6,7 +6,6 @@
 #define WORDTOVEC_NEURALNETWORK_H
 
 
-#include "Matrix.h"
 #include "Vocabulary.h"
 #include "Dictionary/VectorizedDictionary.h"
 #include "WordToVecParameter.h"
@@ -22,15 +21,15 @@ private:
     int EXP_TABLE_SIZE = 1000;
     int MAX_EXP = 6;
     void prepareExpTable();
-    double calculateG(double f, double alpha, double label) const;
+    [[nodiscard]] double calculateG(double f, double alpha, double label) const;
     void trainCbow() const;
     void trainSkipGram() const;
     void updateOutput(double* outputUpdate, const double* outputs, int l2, double g) const;
     double dotProduct(const double* vector1, const double* vector2) const;
 public:
     NeuralNetwork(AbstractCorpus* corpus, const WordToVecParameter& parameter);
-    int vocabularySize() const;
-    VectorizedDictionary train();
+    [[nodiscard]] int vocabularySize() const;
+    [[nodiscard]] VectorizedDictionary train() const;
 };
 
 

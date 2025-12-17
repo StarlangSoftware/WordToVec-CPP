@@ -20,12 +20,12 @@ private:
 public:
     Vocabulary();
     explicit Vocabulary(AbstractCorpus* corpus);
-    int size() const;
-    int getTotalNumberOfWords() const;
-    int getPosition(VocabularyWord* word) const;
-    VocabularyWord* getWord(int index) const;
-    int getTableValue(int index) const;
-    int getTableSize() const;
+    [[nodiscard]] int size() const;
+    [[nodiscard]] int getTotalNumberOfWords() const;
+    int getPosition(const VocabularyWord* word) const;
+    [[nodiscard]] VocabularyWord* getWord(int index) const;
+    [[nodiscard]] int getTableValue(int index) const;
+    [[nodiscard]] int getTableSize() const;
 };
 
 

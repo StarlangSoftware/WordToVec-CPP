@@ -75,64 +75,64 @@ int WordToVecParameter::getSeed() const{
 
 /**
  * Mutator for the layerSize attribute.
- * @param layerSize New size of the word vectors.
+ * @param _layerSize New size of the word vectors.
  */
-void WordToVecParameter::setLayerSize(int layerSize) {
-    this->layerSize = layerSize;
+void WordToVecParameter::setLayerSize(int _layerSize) {
+    this->layerSize = _layerSize;
 }
 
 /**
  * Mutator for cBow attribute
- * @param cbow True if CBow applied; false if SkipGram applied.
+ * @param _cbow True if CBow applied; false if SkipGram applied.
  */
-void WordToVecParameter::setCbow(bool cbow) {
-    this->cbow = cbow;
+void WordToVecParameter::setCbow(bool _cbow) {
+    this->cbow = _cbow;
 }
 
 /**
  * Mutator for alpha attribute
- * @param alpha New learning rate.
+ * @param _alpha New learning rate.
  */
-void WordToVecParameter::setAlpha(double alpha) {
-    this->alpha = alpha;
+void WordToVecParameter::setAlpha(double _alpha) {
+    this->alpha = _alpha;
 }
 
 /**
  * Mutator for the window size attribute.
- * @param window New window size.
+ * @param _window New window size.
  */
-void WordToVecParameter::setWindow(int window) {
-    this->window = window;
+void WordToVecParameter::setWindow(int _window) {
+    this->window = _window;
 }
 
 /**
  * Mutator for the hierarchicalSoftMax attribute.
- * @param hierarchicalSoftMax True is hierarchical softMax applied; false otherwise.
+ * @param _hierarchicalSoftMax True is hierarchical softMax applied; false otherwise.
  */
-void WordToVecParameter::setHierarchicalSoftMax(bool hierarchicalSoftMax) {
-    this->hierarchicalSoftMax = hierarchicalSoftMax;
+void WordToVecParameter::setHierarchicalSoftMax(bool _hierarchicalSoftMax) {
+    this->hierarchicalSoftMax = _hierarchicalSoftMax;
 }
 
 /**
  * Mutator for the negativeSamplingSize attribute.
- * @param negativeSamplingSize New number of negative instances that will be withdrawn.
+ * @param _negativeSamplingSize New number of negative instances that will be withdrawn.
  */
-void WordToVecParameter::setNegativeSamplingSize(int negativeSamplingSize) {
-    this->negativeSamplingSize = negativeSamplingSize;
+void WordToVecParameter::setNegativeSamplingSize(int _negativeSamplingSize) {
+    this->negativeSamplingSize = _negativeSamplingSize;
 }
 
 /**
  * Mutator for the numberOfIterations attribute.
- * @param numberOfIterations New number of iterations.
+ * @param _numberOfIterations New number of iterations.
  */
-void WordToVecParameter::setNumberOfIterations(int numberOfIterations) {
-    this->numberOfIterations = numberOfIterations;
+void WordToVecParameter::setNumberOfIterations(int _numberOfIterations) {
+    this->numberOfIterations = _numberOfIterations;
 }
 
 /**
  * Mutator for the seed attribute.
- * @param seed New number of seed.
+ * @param _seed New number of seed.
  */
-void WordToVecParameter::setSeed(int seed) {
-    this->seed = seed;
+void WordToVecParameter::setSeed(int _seed) {
+    this->seed = _seed;
 }
